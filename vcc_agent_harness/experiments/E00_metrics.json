@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "context": "D",
+  "perturbation_checked": "ABCC1",
+  "reproduced_shape": [
+    400,
+    18533
+  ],
+  "stored_shape": [
+    400,
+    18533
+  ],
+  "exact_bitwise_match": true,
+  "bank_n_perturbations": 9831,
+  "bank_n_genes": 8248,
+  "note": "Verifies re-derivation from the saved bank reproduces the already-exported prediction bit-for-bit, given fixed seeds. Does not re-process raw K562_gwps."
+}

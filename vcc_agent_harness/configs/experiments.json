@@ -1,0 +1,20 @@
+{
+  "max_runs": 20,
+  "max_retries": 2,
+  "experiments": [
+    {
+      "id": "E00",
+      "description": "Reproduce existing K562 baseline. Replace with actual command and outputs after repository audit.",
+      "enabled": false,
+      "command": ["python", "existing_baseline_script.py"],
+      "timeout_seconds": 3600,
+      "required_outputs": ["experiments/E00_metrics.json"]
+    },
+    {"id":"E01", "description":"Global shrinkage ablation; configure real command", "enabled":false, "depends_on":["E00"], "command":[], "timeout_seconds":3600, "required_outputs":[]},
+    {"id":"E02", "description":"Binary detection gate", "enabled":false, "depends_on":["E00"], "command":[], "timeout_seconds":3600, "required_outputs":[]},
+    {"id":"E03", "description":"Smooth percentile and hybrid gates", "enabled":false, "depends_on":["E00"], "command":[], "timeout_seconds":3600, "required_outputs":[]},
+    {"id":"E04", "description":"Direction-aware gate", "enabled":false, "depends_on":["E00"], "command":[], "timeout_seconds":3600, "required_outputs":[]},
+    {"id":"E05", "description":"Build verified scBaseCount reference", "enabled":false, "depends_on":["E00"], "command":[], "timeout_seconds":3600, "required_outputs":[]},
+    {"id":"E06", "description":"scBaseCount ablation and negative control", "enabled":false, "depends_on":["E05"], "command":[], "timeout_seconds":3600, "required_outputs":[]}
+  ]
+}

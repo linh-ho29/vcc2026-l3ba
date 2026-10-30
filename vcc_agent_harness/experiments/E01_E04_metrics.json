@@ -1,0 +1,73 @@
+{
+  "experiments": {
+    "E01_none": {
+      "D": {
+        "mean_gate_weight": 1.0,
+        "fraction_hard_zeroed": 0.0,
+        "total_effect_magnitude_suppressed_frac": 0.0
+      },
+      "E": {
+        "mean_gate_weight": 1.0,
+        "fraction_hard_zeroed": 0.0,
+        "total_effect_magnitude_suppressed_frac": 0.0
+      },
+      "F": {
+        "mean_gate_weight": 1.0,
+        "fraction_hard_zeroed": 0.0,
+        "total_effect_magnitude_suppressed_frac": 0.0
+      }
+    },
+    "E02_binary_detection": {
+      "D": {
+        "mean_gate_weight": 0.5431392788887024,
+        "fraction_hard_zeroed": 0.45686073490530404,
+        "total_effect_magnitude_suppressed_frac": 0.06598085165023804
+      },
+      "E": {
+        "mean_gate_weight": 0.5613230466842651,
+        "fraction_hard_zeroed": 0.438676954621486,
+        "total_effect_magnitude_suppressed_frac": 0.08502084016799927
+      },
+      "F": {
+        "mean_gate_weight": 0.5536071062088013,
+        "fraction_hard_zeroed": 0.44639292073598447,
+        "total_effect_magnitude_suppressed_frac": 0.08794701099395752
+      }
+    },
+    "E03_combined": {
+      "D": {
+        "mean_gate_weight": 0.5780887603759766,
+        "fraction_hard_zeroed": 0.16052446986456592,
+        "total_effect_magnitude_suppressed_frac": 0.060231149196624756
+      },
+      "E": {
+        "mean_gate_weight": 0.5939208269119263,
+        "fraction_hard_zeroed": 0.14617169373549885,
+        "total_effect_magnitude_suppressed_frac": 0.08161193132400513
+      },
+      "F": {
+        "mean_gate_weight": 0.58945232629776,
+        "fraction_hard_zeroed": 0.11665677440241731,
+        "total_effect_magnitude_suppressed_frac": 0.08366352319717407
+      }
+    },
+    "E04_direction_aware": {
+      "D": {
+        "total_effect_magnitude_suppressed_frac": 0.05079841613769531,
+        "induction_cases_rescued_from_hard_zero": 9676,
+        "note": "cases where E03 would hard-zero a POSITIVE (induction) effect purely for low baseline detection, but E04 assigns it nonzero (discounted) weight instead"
+      },
+      "E": {
+        "total_effect_magnitude_suppressed_frac": 0.06994378566741943,
+        "induction_cases_rescued_from_hard_zero": 10996,
+        "note": "cases where E03 would hard-zero a POSITIVE (induction) effect purely for low baseline detection, but E04 assigns it nonzero (discounted) weight instead"
+      },
+      "F": {
+        "total_effect_magnitude_suppressed_frac": 0.07173764705657959,
+        "induction_cases_rescued_from_hard_zero": 5327,
+        "note": "cases where E03 would hard-zero a POSITIVE (induction) effect purely for low baseline detection, but E04 assigns it nonzero (discounted) weight instead"
+      }
+    }
+  },
+  "note": "prediction-difference diagnostics only; no D/E/F ground truth exists"
+}

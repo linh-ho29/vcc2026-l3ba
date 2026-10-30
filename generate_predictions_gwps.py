@@ -118,10 +118,13 @@ def generate_panel(directory, outfile):
     context_files = []
     for ctx in manifest['contexts']:
         p = PRED_DIR / f'{manifest["partition"]}_{ctx}_prediction.h5ad'
-        generate_context(directory, ctx, outpath=p)
+        if p.exists():
+            print(f'{p} already exists, skipping regeneration', flush=True)
+        else:
+            generate_context(directory, ctx, outpath=p)
         context_files.append(p)
     ads = [ad.read_h5ad(p) for p in context_files]
-    combo = ad.concat(ads, axis=0, join='exact', merge='same', index_unique=None)
+    combo = ad.concat(ads, axis=0, join='inner', merge='same', index_unique=None)
     assert combo.n_obs == len(manifest['contexts']) * len(perts) * CELLS_PER_PERT
     combo.X = combo.X.tocsr()
     combo.X.eliminate_zeros()

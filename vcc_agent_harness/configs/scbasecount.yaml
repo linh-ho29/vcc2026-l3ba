@@ -1,0 +1,16 @@
+# Hypothetical selection quotas, not verified dataset IDs.
+source: https://github.com/ArcInstitute/arc-virtual-cell-atlas/tree/main/scBaseCount
+preferred_release: '2026-01-12' # verify at runtime
+species: Homo sapiens
+metadata_first: true
+max_download_gb: 5
+max_source_files: 12
+max_cells_per_study: 2000
+target_total_cells: 30000
+reference_groups:
+  k562_like: {terms: ['K562', 'hematopoietic'], target_cells: 5000}
+  erythroid: {terms: ['erythroblast', 'erythroid progenitor'], target_cells: 5000}
+  immune: {terms: ['T cell', 'B cell', 'monocyte'], target_cells: 6000}
+  epithelial: {terms: ['epithelial'], target_cells: 5000}
+  stromal: {terms: ['fibroblast', 'stromal', 'mesenchymal'], target_cells: 4000}
+  stem_progenitor: {terms: ['pluripotent', 'stem', 'progenitor'], target_cells: 5000}
