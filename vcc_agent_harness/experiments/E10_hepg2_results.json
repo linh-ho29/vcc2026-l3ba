@@ -1,0 +1,184 @@
+{
+  "n_targets_evaluated": 1253,
+  "coverage_summary": {
+    "k562_available": 1246,
+    "rpe1_available": 1240
+  },
+  "metrics": {
+    "M1_k562_gated": {
+      "coverage": 1246,
+      "pearson": 0.5744427001680713,
+      "spearman": 0.6789448711502913,
+      "mae": 0.5775159147362463,
+      "rmse": 0.8034084696341827,
+      "sign_agreement": 0.9983948635634029,
+      "pearson_bootstrap_ci95": [
+        0.5324446390574269,
+        0.6151618813166212
+      ]
+    },
+    "M2_rpe1_gated": {
+      "coverage": 1240,
+      "pearson": 0.7213819699872204,
+      "spearman": 0.8495219566497376,
+      "mae": 0.5304464612515117,
+      "rmse": 0.7483563562437904,
+      "sign_agreement": 1.0,
+      "pearson_bootstrap_ci95": [
+        0.7016015055423009,
+        0.741145680665765
+      ]
+    },
+    "M3_alpha0.0": {
+      "coverage": 1253,
+      "pearson": 0.7218919726038976,
+      "spearman": 0.8389712720483262,
+      "mae": 0.5279644315308826,
+      "rmse": 0.7466381112439434,
+      "sign_agreement": 1.0,
+      "pearson_bootstrap_ci95": [
+        0.7018584412863742,
+        0.74185867332671
+      ]
+    },
+    "M3_alpha0.25": {
+      "coverage": 1253,
+      "pearson": 0.7290454655164783,
+      "spearman": 0.8404651862877965,
+      "mae": 0.5374736287658076,
+      "rmse": 0.7577532297774124,
+      "sign_agreement": 1.0,
+      "pearson_bootstrap_ci95": [
+        0.7098988474198165,
+        0.7495737967323715
+      ]
+    },
+    "M3_alpha0.5": {
+      "coverage": 1253,
+      "pearson": 0.7057549048691216,
+      "spearman": 0.817020791737527,
+      "mae": 0.5486494714588424,
+      "rmse": 0.7705992396720235,
+      "sign_agreement": 1.0,
+      "pearson_bootstrap_ci95": [
+        0.6824432015304183,
+        0.7301100525467676
+      ]
+    },
+    "M3_alpha0.75": {
+      "coverage": 1253,
+      "pearson": 0.6496762815187893,
+      "spearman": 0.7575795419648202,
+      "mae": 0.5608347039894451,
+      "rmse": 0.785091181611909,
+      "sign_agreement": 1.0,
+      "pearson_bootstrap_ci95": [
+        0.6164335680391232,
+        0.6802007231753883
+      ]
+    },
+    "M3_alpha1.0": {
+      "coverage": 1253,
+      "pearson": 0.5706247258850404,
+      "spearman": 0.6679079178964882,
+      "mae": 0.5738783388430221,
+      "rmse": 0.8011397407055938,
+      "sign_agreement": 0.9984038308060654,
+      "pearson_bootstrap_ci95": [
+        0.5319374453472496,
+        0.6101728177032172
+      ]
+    },
+    "M4_alpha0.0": {
+      "coverage": 1253,
+      "pearson": 0.7224399067092414,
+      "spearman": 0.8489378094758135,
+      "mae": 0.5295820448019684,
+      "rmse": 0.7468009663982089,
+      "sign_agreement": 1.0,
+      "pearson_bootstrap_ci95": [
+        0.7017366692244396,
+        0.742681400679422
+      ]
+    },
+    "M4_alpha0.25": {
+      "coverage": 1253,
+      "pearson": 0.7289743690866777,
+      "spearman": 0.8446772472996877,
+      "mae": 0.5392350373924004,
+      "rmse": 0.7579181091870479,
+      "sign_agreement": 1.0,
+      "pearson_bootstrap_ci95": [
+        0.7086841513357832,
+        0.7486839292716861
+      ]
+    },
+    "M4_alpha0.5": {
+      "coverage": 1253,
+      "pearson": 0.7065414635148707,
+      "spearman": 0.8214582710820088,
+      "mae": 0.5502987561770084,
+      "rmse": 0.7707532628953301,
+      "sign_agreement": 1.0,
+      "pearson_bootstrap_ci95": [
+        0.6836650800144044,
+        0.7303912707995032
+      ]
+    },
+    "M4_alpha0.75": {
+      "coverage": 1253,
+      "pearson": 0.652869234117763,
+      "spearman": 0.7644152338380094,
+      "mae": 0.5622163825771126,
+      "rmse": 0.7852221861100069,
+      "sign_agreement": 1.0,
+      "pearson_bootstrap_ci95": [
+        0.6229624758279637,
+        0.682197571088041
+      ]
+    },
+    "M4_alpha1.0": {
+      "coverage": 1253,
+      "pearson": 0.576757883071668,
+      "spearman": 0.681564629836191,
+      "mae": 0.5749502085677979,
+      "rmse": 0.8012363749539821,
+      "sign_agreement": 0.9984038308060654,
+      "pearson_bootstrap_ci95": [
+        0.5352868284134477,
+        0.6155351946564823
+      ]
+    },
+    "E09_learned_weight": {
+      "coverage": 1253,
+      "pearson": 0.6641082393491345,
+      "spearman": 0.7906970287905323,
+      "mae": 0.5469786163669067,
+      "rmse": 0.7741501332643113,
+      "sign_agreement": 1.0,
+      "pearson_bootstrap_ci95": [
+        0.6341925199839625,
+        0.6917132683317045
+      ]
+    }
+  },
+  "decision_vs_M1": {
+    "M2_rpe1_gated": "ACCEPTED",
+    "M3_alpha0.0": "ACCEPTED",
+    "M3_alpha0.25": "ACCEPTED",
+    "M3_alpha0.5": "ACCEPTED",
+    "M3_alpha0.75": "ACCEPTED",
+    "M3_alpha1.0": "REJECTED",
+    "M4_alpha0.0": "ACCEPTED",
+    "M4_alpha0.25": "ACCEPTED",
+    "M4_alpha0.5": "ACCEPTED",
+    "M4_alpha0.75": "ACCEPTED",
+    "M4_alpha1.0": "INCONCLUSIVE",
+    "E09_learned_weight": "ACCEPTED"
+  },
+  "e09_learned_weight_stats": {
+    "mean": 0.26858562806513325,
+    "std": 0.2319596397322038
+  },
+  "note": "y_true converted from HepG2's CP10k-normalized log2_fold_change to natural log for internal consistency only - NOT assumed to be on the same absolute scale as the raw-count K562/RPE1 banks (see E07's scale check, which was run on K562-vs-RPE1 raw effects, not against this CP10k-based ground truth). Pearson/Spearman/sign-agreement are scale-robust; MAE/RMSE should be read with this caveat."
+}

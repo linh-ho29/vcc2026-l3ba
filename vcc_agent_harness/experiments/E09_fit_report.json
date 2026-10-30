@@ -1,0 +1,19 @@
+{
+  "n_development_genes_total": 7093,
+  "n_genes_with_reliability_target": 7093,
+  "n_genes_used_for_fit": 7093,
+  "train_r2": 0.37224640874189374,
+  "coefficients": {
+    "baseline_expression": 0.029814639087852025,
+    "detection_fraction": 0.002381277073469787,
+    "pathway_ribosomal": -0.005409735163545664,
+    "pathway_mitochondrial": 0.00013026837804134688,
+    "pathway_histone": 0.0011301319482472673,
+    "pathway_hemoglobin": 0.0,
+    "source_target_similarity": 0.006052063715876921,
+    "is_perturbation_target": 0.002630867439366247,
+    "intercept": 0.5785417717954829
+  },
+  "l2_regularization": 10.0,
+  "note": "Fit using ONLY K562<->RPE1 (the development pair). Target = per-gene correlation between K562's predicted effect and RPE1's REAL measured effect across perturbations, rescaled to [0,1]. Features use RPE1's own control-cell stats + static source-side quantities - this is the exact same category of information (control cells only) that will be available for HepG2 at E10 inference time. Model coefficients are frozen here, before E10 ever loads HepG2 data."
+}

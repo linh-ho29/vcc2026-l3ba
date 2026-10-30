@@ -86,6 +86,53 @@ E03 (context-control-only gating, lambda=0) remains the validated choice -
 already regenerated as predictions/final_predictions_DEF_gwps_gated_e03.h5ad,
 not yet submitted. Full metrics: vcc_agent_harness/experiments/E05_E06_metrics.json.
 
+## E07: RPE1 signature bank - COMPLETE
+Built predictions/signature_bank_rpe1.npz from gs://2026-vcc-llsa/train/
+rpe1_raw_bulk_01.h5ad (raw, not z-score-normalized), identical formula/
+pseudocount/clip/min-cells as the K562 bank. 2317 perturbations trained.
+Scale check vs K562 on 1989 shared on-target pairs: Pearson 0.689, slope 1.05,
+std ratio 1.02 - genuinely comparable, not assumed. **Headline finding: RPE1's
+trained perturbations have ZERO overlap with the competition's 300-target
+panel** - E08's per-perturbation combination formula cannot fire on a single
+real required prediction; the fallback degenerates to K562-only there, by
+construction. Full report: reports/E07_COVERAGE_NORMALIZATION.md.
+
+## E08/E09: multi-source combination + learned weighting - COMPLETE (code)
+multi_source_transfer.py: M1 (K562-only)/M2 (RPE1-only)/M3 (fixed-weight
+combination, documented missing-source fallback, never zero-fills)/M4
+(M3 + E03 gate). e09_fit_context_weight.py: simple ridge-regularized per-gene
+weighting model, fit using ONLY the K562<->RPE1 development pair (RPE1 already
+marked development, consistent with its role selecting E03), frozen before
+E10 ever loads HepG2 data.
+
+## E10: HepG2 held-out validation - ACCEPTED (research finding), NOT PROMOTED
+Genuinely held-out (never touched before this step); Jurkat untouched, held in
+reserve. Caught and fixed a ground-truth bug first (Arc's own log2_fold_change
+has no pseudocount, produces -28 to -31 floor artifacts on complete knockdowns,
+886/1253 rows affected - recomputed from target_mean/ref_mean with the
+project's own pseudocount formula instead).
+
+Combining K562+RPE1 beats K562-only with non-overlapping bootstrap CIs
+(M1=0.5744 [0.532,0.615] vs M3 alpha=0.25=0.7290 [0.710,0.750], n~1250,
+2000 resamples). Checked for a screen-methodology confound (K562_gwps is
+genome-wide; RPE1/HepG2/Jurkat are all the same "essential" screen family) by
+building a parallel K562-essential bank - confound real but partial (closes
+0.060 of the 0.147 gap) and the combination benefit survives it (K562-essential
+alone 0.634 vs combined-with-RPE1 0.735). E09's learned model underperformed
+the naive fixed blend (0.664 vs 0.729) - not yet the generalization mechanism
+needed to reach the real panel (which E07 shows has zero RPE1 overlap, so a
+direct per-perturbation combination can never apply there). Full report:
+reports/E10_HEPG2_VALIDATION.md.
+
+**Not promoted.** No D/E/F or A/B/C prediction file generated or modified;
+final_predictions_DEF_gwps.h5ad and final_predictions_DEF_gwps_gated_e03.h5ad
+untouched. Promotion needs a working generalizable weighting mechanism, which
+doesn't exist yet - E09's model needs more feature engineering or a different
+functional form before it beats the naive blend, and only a generalizable
+mechanism (not per-perturbation combination) can ever reach the real panel.
+
 ## Champion
-E03 (combined basal-expression gating, context-control-only). No further
-open experiments per the harness's planned list (E00-E06 all run).
+E03 (combined basal-expression gating, context-control-only) remains the
+production choice. E10's multi-source result is a validated research finding,
+not yet a path to a better real submission - stopping here per the task's own
+rule pending either a working E09 model or further direction from the user.
