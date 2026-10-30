@@ -1,0 +1,223 @@
+{
+  "gene_alignment": {
+    "rpe1_duplicate_symbols": 1,
+    "scbasecount_reference_duplicate_symbols": 0,
+    "k562_bank_duplicate_symbols": 2,
+    "k562_bank_duplicate_genes_list": [
+      "TBCE",
+      "HSPA14"
+    ],
+    "note": "dict-based index lookups ({g: i for i, g in enumerate(...)}) silently keep only the LAST occurrence of a duplicated symbol. 2/8248 K562 bank genes affected (TBCE, HSPA14 - both known HGNC paralog-collision symbols, not a pipeline artifact). RPE1 and scBaseCount reference vocabularies have zero duplicates."
+  },
+  "source_vs_target_similarity": {
+    "group_vs_k562_source_correlation": {
+      "epithelial": 0.7603241604525295,
+      "erythroid": 0.8612944331126867,
+      "immune": 0.6578921859959055,
+      "k562_like": 1.0,
+      "stem_progenitor": 0.7544072159334849,
+      "stromal": 0.6514121017763179
+    },
+    "group_vs_rpe1_target_correlation_pearson": {
+      "epithelial": 0.5022808119605439,
+      "erythroid": 0.5669263463475245,
+      "immune": 0.34891581982685366,
+      "k562_like": 0.4929457828476023,
+      "stem_progenitor": 0.490581308223539,
+      "stromal": 0.47868778319521715
+    },
+    "group_vs_rpe1_target_correlation_spearman": {
+      "epithelial": 0.5323676542891469,
+      "erythroid": 0.5847198952611768,
+      "immune": 0.43866229790715194,
+      "k562_like": 0.5071837125578085,
+      "stem_progenitor": 0.5850828476337723,
+      "stromal": 0.5907709811063377
+    },
+    "pearson_based_best_match": "erythroid",
+    "spearman_based_best_match": "stromal",
+    "erythroid_is_most_k562_like_among_all_6_groups": false,
+    "note": "erythroid has the HIGHEST pairwise correlation with k562_like among all 6 reference groups (0.861, next highest is 0.795 for stem_progenitor-stromal) - i.e. erythroid is distinctly the group most similar to the SOURCE line, not just a target-specific match. Its win over epithelial as RPE1's 'best target match' (0.567 vs 0.502) is a narrow margin (~13% relative) against a background where ALL 6 groups correlate with RPE1 in a fairly narrow 0.35-0.57 band, consistent with a shared global detection-breadth factor dominating the correlation rather than cell-type-specific signal."
+  },
+  "normalization_sanity": {
+    "gene_level_check": {
+      "ACTB": {
+        "rpe1_zscore_based": 0.45798868088811495,
+        "scbasecount_k562like_raw_based": 0.49825000762939453,
+        "scbasecount_erythroid_raw_based": 0.9745000004768372
+      },
+      "GAPDH": {
+        "rpe1_zscore_based": 0.5261645624727906,
+        "scbasecount_k562like_raw_based": 0.4894999861717224,
+        "scbasecount_erythroid_raw_based": 0.8632500171661377
+      },
+      "HBB": {
+        "rpe1_zscore_based": null,
+        "scbasecount_k562like_raw_based": 0.002749999985098839,
+        "scbasecount_erythroid_raw_based": 0.9894999861717224
+      },
+      "HBA1": {
+        "rpe1_zscore_based": null,
+        "scbasecount_k562like_raw_based": 0.29875001311302185,
+        "scbasecount_erythroid_raw_based": 0.9232500195503235
+      },
+      "HBZ": {
+        "rpe1_zscore_based": null,
+        "scbasecount_k562like_raw_based": 0.07500000298023224,
+        "scbasecount_erythroid_raw_based": 0.02174999937415123
+      }
+    },
+    "note": "RPE1's detection_fraction is computed as fraction of cells with normalized_value > 0, on a file previously confirmed z-score-like (68% negative values, zero exact zeros) - NOT a fraction of cells with nonzero RAW count, which is what scBaseCount's detection_fraction measures. These are DIFFERENT definitions computed on DIFFERENT scales, blended together in E06 as if commensurable. ACTB/GAPDH (housekeeping, expected near-universal raw detection) and HBB/HBA1/HBZ (blood-specific, expected near-absent raw detection in a retinal pigment epithelial line) are reported above to assess whether RPE1's z-score-based proxy still tracks the expected direction despite the scale mismatch."
+  },
+  "sign_sanity": {
+    "fraction_y_true_negative": 0.9954887218045113
+  },
+  "e03_regression_check": {
+    "pearson": 0.5007241174486857,
+    "spearman": 0.6959879691308739,
+    "sign_agreement": 0.9724310776942355
+  },
+  "all_6_groups_at_lambda1": {
+    "epithelial": {
+      "pearson": 0.48582096421504034,
+      "spearman": 0.6929589806013785,
+      "sign_agreement": 0.9634085213032582,
+      "mean_gate_weight": 0.9583895431948186
+    },
+    "erythroid": {
+      "pearson": 0.472554745266185,
+      "spearman": 0.6746479612092696,
+      "sign_agreement": 0.9634085213032582,
+      "mean_gate_weight": 0.9751590977075106
+    },
+    "immune": {
+      "pearson": 0.5998196919583134,
+      "spearman": 0.7410200781604519,
+      "sign_agreement": 0.9614035087719298,
+      "mean_gate_weight": 0.6392208195419837
+    },
+    "k562_like": {
+      "pearson": 0.4983203492391039,
+      "spearman": 0.699417214025566,
+      "sign_agreement": 0.962907268170426,
+      "mean_gate_weight": 0.8676382971213277
+    },
+    "stem_progenitor": {
+      "pearson": 0.519901928931797,
+      "spearman": 0.7297819941686057,
+      "sign_agreement": 0.9619047619047619,
+      "mean_gate_weight": 0.8583501857474334
+    },
+    "stromal": {
+      "pearson": 0.5581539587575387,
+      "spearman": 0.7477309118799625,
+      "sign_agreement": 0.9614035087719298,
+      "mean_gate_weight": 0.7579126882635262
+    }
+  },
+  "match_quality_vs_performance_correlation": -0.908314031368966,
+  "shuffled_reference_multiseed": {
+    "0.3": {
+      "mean": 0.4929458445157519,
+      "std": 0.0010664921266856748,
+      "min": 0.4911188557120597,
+      "max": 0.49452258585877285,
+      "all_seeds": [
+        0.49367610304784043,
+        0.49249880044547534,
+        0.4916719043787359,
+        0.49270999900468126,
+        0.4911188557120597,
+        0.49410779606933336,
+        0.49452258585877285,
+        0.49268327105802934,
+        0.49235348997030254,
+        0.4941156396122889
+      ]
+    },
+    "0.6": {
+      "mean": 0.5039758840387392,
+      "std": 0.0019700489437852156,
+      "min": 0.49895197825555115,
+      "max": 0.5060429716218571,
+      "all_seeds": [
+        0.5060429716218571,
+        0.5029999713315197,
+        0.5026212583348562,
+        0.504424191381368,
+        0.5039607106182594,
+        0.5049185732938022,
+        0.5048170885615241,
+        0.49895197825555115,
+        0.5055171315207623,
+        0.5055049654678913
+      ]
+    },
+    "1.0": {
+      "mean": 0.18826637010814676,
+      "std": 0.027593713541794115,
+      "min": 0.1520399005437626,
+      "max": 0.24170853193306327,
+      "all_seeds": [
+        0.17793303379912837,
+        0.1731405856111133,
+        0.1520399005437626,
+        0.22752901778724413,
+        0.24170853193306327,
+        0.19031487139607403,
+        0.1681945428508687,
+        0.16945024116424925,
+        0.21105772194202685,
+        0.17129525405393686
+      ]
+    }
+  },
+  "expression_matched_random_reference": {
+    "mean": 0.5146782005543242,
+    "std": 0.002397375817788574,
+    "all_seeds": [
+      0.5131360254410217,
+      0.5120489030035079,
+      0.5127454330983946,
+      0.5165068099909159,
+      0.5128717320403797,
+      0.5182844453999523,
+      0.5132736854021029,
+      0.5125569104979272,
+      0.5172592848866797,
+      0.51809877578236
+    ]
+  },
+  "global_shrinkage_baseline": {
+    "1.0": {
+      "pearson": 0.48129024378810703,
+      "spearman": 0.6855305870319434,
+      "sign_agreement": 0.9724310776942355
+    },
+    "0.8": {
+      "pearson": 0.4812902437881071,
+      "spearman": 0.6855305870319434,
+      "sign_agreement": 0.9724310776942355
+    },
+    "0.585": {
+      "pearson": 0.48129024378810703,
+      "spearman": 0.6855305870319434,
+      "sign_agreement": 0.9724310776942355
+    },
+    "0.4": {
+      "pearson": 0.4812902437881071,
+      "spearman": 0.6855305870319434,
+      "sign_agreement": 0.9724310776942355
+    },
+    "0.2": {
+      "pearson": 0.4812902437881071,
+      "spearman": 0.6855305870319434,
+      "sign_agreement": 0.9724310776942355
+    },
+    "0.0": {
+      "pearson": NaN,
+      "spearman": NaN,
+      "sign_agreement": 0.0
+    }
+  }
+}
