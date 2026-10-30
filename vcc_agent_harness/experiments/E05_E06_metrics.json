@@ -1,0 +1,79 @@
+{
+  "overlap_count": 1995,
+  "best_matching_group": "erythroid",
+  "worst_matching_group": "immune",
+  "group_correlations": {
+    "epithelial": 0.5022808119605439,
+    "erythroid": 0.5669263463475245,
+    "immune": 0.34891581982685366,
+    "k562_like": 0.4929457828476023,
+    "stem_progenitor": 0.490581308223539,
+    "stromal": 0.47868778319521715
+  },
+  "reference_fallback_count": 0,
+  "note": "RPE1 file is z-score-normalized, not raw counts - only correlation (direction/rank agreement) is reported, not MSE, as in the E01-E04 check. lam=0.0 is checked to exactly equal E03_combined from the E01-E04 run.",
+  "variants": {
+    "E06_best_match_lam0.0": {
+      "pearson": 0.5007241193905396,
+      "spearman": 0.6959480990505421,
+      "sign_agreement": 0.9724310776942355
+    },
+    "E06_best_match_lam0.3": {
+      "pearson": 0.4825461768587026,
+      "spearman": 0.6892539568194822,
+      "sign_agreement": 0.9724310776942355
+    },
+    "E06_best_match_lam0.6": {
+      "pearson": 0.4824669894598452,
+      "spearman": 0.691421343561533,
+      "sign_agreement": 0.9724310776942355
+    },
+    "E06_best_match_lam1.0": {
+      "pearson": 0.47255474743590326,
+      "spearman": 0.6746510324368572,
+      "sign_agreement": 0.9634085213032582
+    },
+    "E06_mismatched_lam0.0": {
+      "pearson": 0.5007241193905396,
+      "spearman": 0.6959480990505421,
+      "sign_agreement": 0.9724310776942355
+    },
+    "E06_mismatched_lam0.3": {
+      "pearson": 0.4867541501342833,
+      "spearman": 0.7026381922723814,
+      "sign_agreement": 0.9724310776942355
+    },
+    "E06_mismatched_lam0.6": {
+      "pearson": 0.49862821779466276,
+      "spearman": 0.7254639799933217,
+      "sign_agreement": 0.9724310776942355
+    },
+    "E06_mismatched_lam1.0": {
+      "pearson": 0.5998196925903234,
+      "spearman": 0.7410200781604519,
+      "sign_agreement": 0.9614035087719298
+    },
+    "E06_shuffled_lam0.0": {
+      "pearson": 0.5007241193905396,
+      "spearman": 0.6959480990505421,
+      "sign_agreement": 0.9724310776942355
+    },
+    "E06_shuffled_lam0.3": {
+      "pearson": 0.49403301866193344,
+      "spearman": 0.7008816241378918,
+      "sign_agreement": 0.9724310776942355
+    },
+    "E06_shuffled_lam0.6": {
+      "pearson": 0.5060960907890926,
+      "spearman": 0.7234408830246375,
+      "sign_agreement": 0.9724310776942355
+    },
+    "E06_shuffled_lam1.0": {
+      "pearson": 0.17982789477846586,
+      "spearman": 0.19016470642722244,
+      "sign_agreement": 0.6421052631578947
+    }
+  },
+  "lambda_zero_sanity_check_passed": true,
+  "lambda_zero_matches_prior_E03_pearson_0.5007": true
+}

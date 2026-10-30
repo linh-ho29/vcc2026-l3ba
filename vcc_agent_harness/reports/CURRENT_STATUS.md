@@ -50,3 +50,42 @@ on-target knockdown effect). Results:
   non-self-target genes, not covered here
 - Sign agreement ~97% across all modes, uniformly high and less informative
   for on-target effects specifically (knockdown is trivially downregulation)
+
+## E05: scBaseCount curated reference - COMPLETE
+Verified manifest (data/manifests/scbasecount_selection.csv): 12 real SRX/ERX
+accessions, 3.84GB, human, non-perturbed, well-annotated, across 6 reference
+groups (k562_like, erythroid, immune, epithelial, stromal, stem_progenitor).
+RPE1 explicitly excluded (would leak into its own validation set). Built
+reference-group pseudobulk expression, detection fractions, study-balanced
+PCA (one row per accession regardless of cell count), and 4 standard HGNC
+gene-family features (ribosomal/mitochondrial/histone/hemoglobin). Biology
+check passed: HBB/HBA1 detection highest in erythroid group (0.99/0.92); HBZ
+and HBA1 elevated in k562_like relative to other non-erythroid groups,
+consistent with K562 being erythroleukemia (matches the HBZ finding from the
+E01-E04 ablation). Saved to predictions/scbasecount_reference.npz.
+
+## E06: context-control + scBaseCount blend - REJECTED
+Blended RPE1's own real context stats with its best-data-matched scBaseCount
+reference group (erythroid, found via detection-fraction correlation, no
+cell-type label used - correlations: erythroid 0.567, epithelial 0.502,
+k562_like 0.493, stem_progenitor 0.491, stromal 0.479, immune 0.349), at
+lambda in {0, 0.3, 0.6, 1.0}. lambda=0 sanity check passed exactly (all three
+variants collapse to the prior E03 result, Pearson=0.5007, as required by
+construction).
+
+Negative-control results are the finding: the MISMATCHED reference (immune -
+the worst-correlating group, deliberately wrong) outperforms the correctly
+best-matched reference (erythroid) at every lambda>0, and beats plain E03 at
+lambda=1.0 (Pearson 0.600 vs 0.501). A gene-shuffled version of the correct
+reference also briefly outperforms the real one at lambda=0.6. This is
+exactly the "scBaseCount only acts as generic shrinkage / noise" rejection
+criterion in AGENT_PROMPT.md's evaluation protocol.
+
+**Decision: REJECTED. Do not incorporate E06 into the production pipeline.**
+E03 (context-control-only gating, lambda=0) remains the validated choice -
+already regenerated as predictions/final_predictions_DEF_gwps_gated_e03.h5ad,
+not yet submitted. Full metrics: vcc_agent_harness/experiments/E05_E06_metrics.json.
+
+## Champion
+E03 (combined basal-expression gating, context-control-only). No further
+open experiments per the harness's planned list (E00-E06 all run).
