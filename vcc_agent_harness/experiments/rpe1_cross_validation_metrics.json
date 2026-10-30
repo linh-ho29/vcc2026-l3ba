@@ -1,0 +1,26 @@
+{
+  "overlap_count": 1995,
+  "modes": {
+    "E01_none": {
+      "pearson": 0.48129024522054326,
+      "spearman": 0.6855305870319434,
+      "sign_agreement": 0.9724310776942355
+    },
+    "E02_binary_detection": {
+      "pearson": 0.48129024522054326,
+      "spearman": 0.6855305870319434,
+      "sign_agreement": 0.9724310776942355
+    },
+    "E03_combined": {
+      "pearson": 0.5007241193905396,
+      "spearman": 0.6959480990505421,
+      "sign_agreement": 0.9724310776942355
+    },
+    "E04_direction_aware": {
+      "pearson": 0.5007241193905396,
+      "spearman": 0.6959480990505421,
+      "sign_agreement": 0.9724310776942355
+    }
+  },
+  "note": "RPE1 file is normalized (z-score-like, not raw counts) - K562's log-fold effect and RPE1's real effect are NOT on directly comparable absolute scales, so only correlation (direction/rank agreement) is reported, not MSE."
+}

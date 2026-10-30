@@ -28,3 +28,25 @@ explicit user approval.
 Download rpe1_normalized_singlecell_01.h5ad from gs://2026-vcc-llsa/train/,
 then build a K562->RPE1 cross-context validation using RPE1's own real
 measured perturbation responses as ground truth.
+
+## RPE1 cross-context validation (real ground truth, not a diagnostic)
+Downloaded rpe1_normalized_singlecell_01.h5ad (8.7GB, local Mac, no GCP cost).
+File is z-score-like normalized (68% negative values, zero exact zeros) - NOT
+raw counts. Original log-pseudocount-ratio formula was invalid for this scale;
+corrected to compare via correlation (direction/rank agreement) rather than
+MSE, since K562's log-fold effect and RPE1's native-units effect are not on
+directly comparable absolute scales.
+
+1,995 genes overlap (K562-trained signature AND RPE1's own real measured
+on-target knockdown effect). Results:
+- E01 (ungated): Pearson 0.481, Spearman 0.686
+- E02 (binary detection): identical to E01 - overlap set is pre-selected for
+  genes RPE1 successfully targeted, so almost all are already well-detected;
+  binary threshold rarely triggers
+- E03 (combined smooth) / E04 (direction-aware): Pearson 0.501, Spearman 0.696
+  - real, modest improvement over ungated baseline
+- E04 = E03 exactly on this test since it only covers on-target (always
+  downregulation) effects - direction-awareness only matters for downstream,
+  non-self-target genes, not covered here
+- Sign agreement ~97% across all modes, uniformly high and less informative
+  for on-target effects specifically (knockdown is trivially downregulation)
