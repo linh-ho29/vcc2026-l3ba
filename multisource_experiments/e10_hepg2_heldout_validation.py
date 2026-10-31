@@ -28,11 +28,11 @@ import scipy.sparse as sp
 from scipy.stats import pearsonr, spearmanr
 
 import sys
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "lib"))
 from expression_gating import GateConfig, compute_context_gate_stats, compute_gate_weights
 from multi_source_transfer import SourceBank, combine_effect_row
 
-ROOT = Path(__file__).parent
+ROOT = Path(__file__).parent.parent
 PRED_DIR = ROOT / "predictions"
 HEPG2_RAW = ROOT / "data" / "GSE264667_hepg2_raw_singlecell_01.h5ad"
 HEPG2_DE = ROOT / "data" / "arc_pie" / "hepg2.parquet"

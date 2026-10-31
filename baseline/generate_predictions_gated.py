@@ -17,10 +17,10 @@ import pandas as pd
 import scipy.sparse as sp
 import anndata as ad
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "lib"))
 from expression_gating import GateConfig, compute_context_gate_stats, compute_gate_weights, apply_gate_to_effect
 
-ROOT = Path(__file__).parent
+ROOT = Path(__file__).parent.parent
 FINAL_DIR = Path.home() / "Downloads" / "vcc_2026_controls_final"
 PRED_DIR = ROOT / "predictions"
 

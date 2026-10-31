@@ -32,11 +32,11 @@ import anndata as ad
 import scipy.sparse as sp
 
 import sys
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "lib"))
 from expression_gating import compute_context_gate_stats
 from multi_source_transfer import SourceBank, ContextWeightModel
 
-ROOT = Path(__file__).parent
+ROOT = Path(__file__).parent.parent
 PRED_DIR = ROOT / "predictions"
 RPE1_RAW_BULK = ROOT / "data" / "rpe1_raw_bulk_01.h5ad"
 OUT_MODEL = PRED_DIR / "context_weight_model.npz"

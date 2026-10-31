@@ -14,11 +14,11 @@ import scipy.sparse as sp
 from scipy.stats import pearsonr, spearmanr
 
 import sys
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "lib"))
 from expression_gating import GateConfig, compute_context_gate_stats, compute_gate_weights
 from scbasecount_blend import best_and_worst_matching_group, reference_gene_stats, blend, compute_group_percentile
 
-REPO_ROOT = Path(__file__).parent
+REPO_ROOT = Path(__file__).parent.parent
 RPE1_PATH = REPO_ROOT / "data" / "rpe1_normalized_singlecell_01.h5ad"
 PRED_DIR = REPO_ROOT / "predictions"
 REF_PATH = PRED_DIR / "scbasecount_reference.npz"

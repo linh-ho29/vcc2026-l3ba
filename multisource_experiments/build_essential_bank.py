@@ -72,7 +72,7 @@ def build(src_path, out_path):
 
 
 if __name__ == "__main__":
-    ROOT = Path(__file__).parent
+    ROOT = Path(__file__).parent.parent
     build(ROOT / "data" / "K562_essential_raw_bulk_01.h5ad",
           ROOT / "predictions" / "signature_bank_k562_essential.npz")
     print("DONE", flush=True)

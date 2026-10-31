@@ -25,14 +25,14 @@ from scipy.stats import pearsonr
 from sklearn.metrics import mean_squared_error
 
 import sys
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "lib"))
 from expression_gating import (GateConfig, compute_context_gate_stats, compute_gate_weights,
                                 compute_gate_weights_direction_aware)
 
-REPO_ROOT = Path(__file__).parent
+REPO_ROOT = Path(__file__).parent.parent
 RPE1_PATH = REPO_ROOT / "data" / "rpe1_normalized_singlecell_01.h5ad"
 PRED_DIR = REPO_ROOT / "predictions"
-OUT_PATH = Path(__file__).parent / "vcc_agent_harness" / "experiments" / "rpe1_cross_validation_metrics.json"
+OUT_PATH = REPO_ROOT / "vcc_agent_harness" / "experiments" / "rpe1_cross_validation_metrics.json"
 
 SEED = 2026
 SHRINKAGE = 0.65

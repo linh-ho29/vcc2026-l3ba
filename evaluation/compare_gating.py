@@ -4,6 +4,7 @@ signature bank and the REAL control cells for contexts D/E/F (already
 downloaded locally). Does not retrain or modify the existing signature bank -
 only adjusts how much of its effect gets applied per context/gene.
 """
+import sys
 from pathlib import Path
 
 import anndata as ad
@@ -11,9 +12,10 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 
+sys.path.insert(0, str(Path(__file__).parent.parent / "lib"))
 from expression_gating import GateConfig, compute_context_gate_stats, compute_gate_weights, apply_gate_to_effect
 
-PRED_DIR = Path(__file__).parent / "predictions"
+PRED_DIR = Path(__file__).parent.parent / "predictions"
 FINAL_DIR = Path.home() / "Downloads" / "vcc_2026_controls_final"
 SHRINKAGE = 0.65
 CLIP_LOG_FOLD = 1.0

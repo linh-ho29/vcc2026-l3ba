@@ -30,7 +30,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 
-ROOT = Path(__file__).parent
+ROOT = Path(__file__).parent.parent
 MANIFEST = ROOT / "data" / "manifests" / "scbasecount_selection.csv"
 RAW_DIR = ROOT / "data" / "scbasecount"
 OUT_PATH = ROOT / "predictions" / "scbasecount_reference.npz"

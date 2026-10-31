@@ -35,7 +35,7 @@ from pathlib import Path
 import anndata as ad
 import numpy as np
 
-ROOT = Path(__file__).parent
+ROOT = Path(__file__).parent.parent
 SRC_PATH = ROOT / "data" / "rpe1_raw_bulk_01.h5ad"
 OUT_NPZ = ROOT / "predictions" / "signature_bank_rpe1.npz"
 OUT_MANIFEST = ROOT / "predictions" / "signature_bank_rpe1_manifest.json"

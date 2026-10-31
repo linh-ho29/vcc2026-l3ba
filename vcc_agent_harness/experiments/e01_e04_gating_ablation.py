@@ -22,7 +22,7 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "lib"))
 from expression_gating import (GateConfig, compute_context_gate_stats, compute_gate_weights,
                                 compute_gate_weights_direction_aware, apply_gate_to_effect)
 
