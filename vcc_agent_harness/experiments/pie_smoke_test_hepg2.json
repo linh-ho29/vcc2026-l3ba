@@ -1,0 +1,86 @@
+{
+  "smoke_test": true,
+  "fold": "hepg2",
+  "setting": "unseen_ctx",
+  "sanity_check_vs_production_bank": {
+    "n": 827,
+    "pearson": 0.7086105632690279,
+    "sign_agreement": 1.0
+  },
+  "learned_source_weights": {
+    "jurkat": 0.7152943422196294,
+    "k562": 0.44873220578684736,
+    "rpe1": 0.2908341466894116
+  },
+  "test_set_results_ontarget_only": {
+    "M1_k562_only": {
+      "n": 581,
+      "coverage": 0.6701268742791234,
+      "pearson_delta_ontarget": 0.9263474870101442,
+      "sign_agreement": 1.0,
+      "calibration_slope_true_vs_pred": 0.9828205793794207
+    },
+    "M2_rpe1_only": {
+      "n": 665,
+      "coverage": 0.7670126874279123,
+      "pearson_delta_ontarget": 0.9587476965858575,
+      "sign_agreement": 1.0,
+      "calibration_slope_true_vs_pred": 0.9924980114826671
+    },
+    "M3_equal_mixture": {
+      "n": 867,
+      "coverage": 1.0,
+      "pearson_delta_ontarget": 0.9552619202147213,
+      "sign_agreement": 1.0,
+      "calibration_slope_true_vs_pred": 0.9713869687939294
+    },
+    "M4_learned_weight_mixture": {
+      "n": 867,
+      "coverage": 1.0,
+      "pearson_delta_ontarget": 0.9524382499326022,
+      "sign_agreement": 1.0,
+      "calibration_slope_true_vs_pred": 0.960390344350696
+    }
+  },
+  "test_set_results_full_profile": {
+    "M1_k562_only": {
+      "n": 581,
+      "coverage": 0.6701268742791234,
+      "pearson_delta_full_profile_mean": 0.2501609480389839,
+      "pearson_delta_full_profile_median": 0.24131458626848662,
+      "dir20_mean": 0.7549913941480206
+    },
+    "M2_rpe1_only": {
+      "n": 665,
+      "coverage": 0.7670126874279123,
+      "pearson_delta_full_profile_mean": 0.321760338335629,
+      "pearson_delta_full_profile_median": 0.3140121653167881,
+      "dir20_mean": 0.8032330827067669
+    },
+    "M3_equal_mixture": {
+      "n": 867,
+      "coverage": 1.0,
+      "pearson_delta_full_profile_mean": 0.34196493701311215,
+      "pearson_delta_full_profile_median": 0.33741610026001834,
+      "dir20_mean": 0.8162053056516724
+    },
+    "M4_learned_weight_mixture": {
+      "n": 867,
+      "coverage": 1.0,
+      "pearson_delta_full_profile_mean": 0.32828047627172297,
+      "pearson_delta_full_profile_median": 0.32945761863460415,
+      "dir20_mean": 0.8124567474048443
+    }
+  },
+  "de_direction_dir20_single_source": {
+    "M1_k562_only": {
+      "n": 581,
+      "dir20_mean": 0.7549913941480206
+    },
+    "M2_rpe1_only": {
+      "n": 665,
+      "dir20_mean": 0.8032330827067669
+    }
+  },
+  "note": "delta_p is a log1p-DIFFERENCE (perturbed minus control pseudobulk), not a log-RATIO - not assumed comparable in absolute scale to signature_bank_k562gwps.npz's ln pseudocount-ratio effect; only sign/rank agreement is treated as meaningful in the sanity check. tested.npy is uniformly True in this preprocessed format - no within-vocabulary missingness signal available at this stage."
+}
