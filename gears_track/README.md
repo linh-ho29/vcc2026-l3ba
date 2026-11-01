@@ -40,6 +40,15 @@ and `predictions/validation_predictions.npz` (37.8 MB). Both remain only at
 say so explicitly - it would mean setting up Git LFS for this repo, which
 hasn't been done yet.
 
+**Also local-only, for the same reason:** `go.csv` (GEARS's GO-similarity
+graph cache - source/target/importance edges, 7,519,463 rows, 169 MB -
+exceeds GitHub's 100 MB limit on its own) now lives at `data/gears/go.csv`
+(sha256 `48551525bd19bb339a06a0806a53a2951d11e44080e633db0ba5d9fa12ec3c7b`).
+This is one of the two graph-cache files needed to resume training with the
+exact same graph the checkpoint was trained on (the other,
+`simulation_42_0.75_0.4_20_coexpression_network.csv`, is only 150 KB and
+still needed - see the retrieval priority list from this conversation).
+
 ## Current state (honest numbers, from `evaluation/metrics.json`)
 
 Test split: `simulation_seed42_test_unseen_single`, 1,905 perturbations,
