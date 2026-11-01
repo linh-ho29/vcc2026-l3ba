@@ -1,0 +1,18 @@
+{
+ "split": "simulation_seed42_test_unseen_single",
+ "n_perts": 1905,
+ "summary": {
+  "pearson_delta_mean": 0.02796969195330976,
+  "pearson_delta_median": 0.0195460245013237,
+  "pearson_delta_de_mean": 0.17721188616590713,
+  "pearson_delta_de_median": 0.20229630172252655,
+  "pearson_de_mean": 0.15219734325082732,
+  "pearson_de_median": 0.17349523305892944,
+  "dir20_mean": 0.28551181102362205,
+  "dir20_median": 0.3,
+  "mse_de_mean": 0.505595572429692,
+  "mse_de_median": 0.48667994141578674,
+  "n_perts": 1905
+ },
+ "note": "computed on per-perturbation mean profiles; held-out test split only; no training data used"
+}

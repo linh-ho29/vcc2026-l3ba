@@ -1,0 +1,70 @@
+{
+ "arrays_finite": true,
+ "shape_checks": [
+  {
+   "name": "gene_embeddings",
+   "shape": [
+    8248,
+    64
+   ],
+   "dtype": "float32",
+   "all_finite": true
+  },
+  {
+   "name": "pert_embeddings_post",
+   "shape": [
+    8248,
+    64
+   ],
+   "dtype": "float32",
+   "all_finite": true
+  },
+  {
+   "name": "delta_mean",
+   "shape": [
+    1905,
+    8248
+   ],
+   "dtype": "float32",
+   "all_finite": true
+  },
+  {
+   "name": "predicted_mean",
+   "shape": [
+    1905,
+    8248
+   ],
+   "dtype": "float32",
+   "all_finite": true
+  }
+ ],
+ "issues": [
+  "duplicate gene symbols present in panel (recorded, not filled)"
+ ],
+ "duplicate_gene_symbols": 2,
+ "test_train_gene_overlap": [],
+ "no_heldout_leakage": "predictions use only ctrl-cell basal expression + perturbation identity; no perturbed-cell outcomes from val/test were inputs",
+ "determinism": {
+  "bitwise_equal": false,
+  "max_abs_diff_per_cond": [
+   0.2809360921382904,
+   0.3773559629917145,
+   0.33230555057525635,
+   0.3129245340824127,
+   0.32551309466362
+  ],
+  "max_rel_diff_per_cond": [
+   1420.249755859375,
+   33317.296875,
+   5668.3779296875,
+   4504.28271484375,
+   7700.734375
+  ],
+  "max_abs_diff_overall": 0.3773559629917145,
+  "n_conditions_checked": 5,
+  "interpretation": "predictions are STOCHASTIC by design: GEARS predict() resamples 300 control cells per condition as basal (np.random.randint in create_cell_graph_dataset_for_prediction, gears/utils.py:283). Re-prediction of the same condition with a different control draw differs by up to ~0.3-0.4 log1p units on the worst genes (max abs diff over 5 val conditions: 0.377). Stored test/val predictions are single draws; averaging multiple draws or using the full 2,000-cell control mean as basal would reduce this noise floor.",
+  "note": "re-prediction vs stored validation_predictions.npz, same checkpoint, eval mode",
+  "root_cause": "control-cell resampling in GEARS predict() (gears/utils.py:283), not float nondeterminism"
+ },
+ "missing_vcc_target_list": "VCC 2026 required-target list not provided; column filled with 'not_provided'"
+}
