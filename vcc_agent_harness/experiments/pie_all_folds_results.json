@@ -1,0 +1,210 @@
+{
+  "folds": {
+    "hepg2": {
+      "train_contexts": [
+        "jurkat",
+        "k562",
+        "rpe1"
+      ],
+      "learned_weight": {
+        "jurkat": 0.7152943422196334,
+        "k562": 0.4487322057868399,
+        "rpe1": 0.2908341466894147
+      },
+      "results": {
+        "single_jurkat": {
+          "n": 645,
+          "coverage": 0.7439446366782007,
+          "pearson_full_profile_mean": 0.22899255054821588,
+          "pearson_full_profile_median": 0.1977524164044707,
+          "dir20_mean": 0.7410852713178294
+        },
+        "single_k562": {
+          "n": 581,
+          "coverage": 0.6701268742791234,
+          "pearson_full_profile_mean": 0.2501609480389839,
+          "pearson_full_profile_median": 0.24131458626848662,
+          "dir20_mean": 0.7549913941480206
+        },
+        "single_rpe1": {
+          "n": 665,
+          "coverage": 0.7670126874279123,
+          "pearson_full_profile_mean": 0.321760338335629,
+          "pearson_full_profile_median": 0.3140121653167881,
+          "dir20_mean": 0.8032330827067669
+        },
+        "equal_mixture": {
+          "n": 867,
+          "coverage": 1.0,
+          "pearson_full_profile_mean": 0.34196493701311215,
+          "pearson_full_profile_median": 0.33741610026001834,
+          "dir20_mean": 0.8162053056516724
+        },
+        "learned_weight_mixture": {
+          "n": 867,
+          "coverage": 1.0,
+          "pearson_full_profile_mean": 0.32828047627172297,
+          "pearson_full_profile_median": 0.32945761863460404,
+          "dir20_mean": 0.8124567474048443
+        }
+      },
+      "best_single_source_pearson": 0.321760338335629,
+      "equal_mixture_beats_best_single": true
+    },
+    "jurkat": {
+      "train_contexts": [
+        "hepg2",
+        "k562",
+        "rpe1"
+      ],
+      "learned_weight": {
+        "hepg2": 0.6436096978837511,
+        "k562": 0.31011550940528954,
+        "rpe1": 0.5081816331934272
+      },
+      "results": {
+        "single_hepg2": {
+          "n": 624,
+          "coverage": 0.6380368098159509,
+          "pearson_full_profile_mean": 0.225893737466544,
+          "pearson_full_profile_median": 0.18980287131567009,
+          "dir20_mean": 0.7891025641025641
+        },
+        "single_k562": {
+          "n": 668,
+          "coverage": 0.6830265848670757,
+          "pearson_full_profile_mean": 0.28338789483280535,
+          "pearson_full_profile_median": 0.2689745989884909,
+          "dir20_mean": 0.804865269461078
+        },
+        "single_rpe1": {
+          "n": 732,
+          "coverage": 0.7484662576687117,
+          "pearson_full_profile_mean": 0.2394591267716081,
+          "pearson_full_profile_median": 0.20535810532819918,
+          "dir20_mean": 0.7754781420765027
+        },
+        "equal_mixture": {
+          "n": 978,
+          "coverage": 1.0,
+          "pearson_full_profile_mean": 0.29425541323446713,
+          "pearson_full_profile_median": 0.27762756257979593,
+          "dir20_mean": 0.8198364008179959
+        },
+        "learned_weight_mixture": {
+          "n": 978,
+          "coverage": 1.0,
+          "pearson_full_profile_mean": 0.28257201955691685,
+          "pearson_full_profile_median": 0.2595671590815122,
+          "dir20_mean": 0.8153374233128835
+        }
+      },
+      "best_single_source_pearson": 0.28338789483280535,
+      "equal_mixture_beats_best_single": true
+    },
+    "k562": {
+      "train_contexts": [
+        "hepg2",
+        "jurkat",
+        "rpe1"
+      ],
+      "learned_weight": {
+        "hepg2": 0.39979943132943113,
+        "jurkat": 0.474491050588737,
+        "rpe1": 0.6051159733255
+      },
+      "results": {
+        "single_hepg2": {
+          "n": 586,
+          "coverage": 0.6628959276018099,
+          "pearson_full_profile_mean": 0.2540972653424017,
+          "pearson_full_profile_median": 0.24374812690335895,
+          "dir20_mean": 0.803839590443686
+        },
+        "single_jurkat": {
+          "n": 662,
+          "coverage": 0.748868778280543,
+          "pearson_full_profile_mean": 0.28407821827700086,
+          "pearson_full_profile_median": 0.2779204416127039,
+          "dir20_mean": 0.7931268882175226
+        },
+        "single_rpe1": {
+          "n": 637,
+          "coverage": 0.7205882352941176,
+          "pearson_full_profile_mean": 0.2353825409837368,
+          "pearson_full_profile_median": 0.20951742077700952,
+          "dir20_mean": 0.7664835164835165
+        },
+        "equal_mixture": {
+          "n": 884,
+          "coverage": 1.0,
+          "pearson_full_profile_mean": 0.31252884114298285,
+          "pearson_full_profile_median": 0.3114014088160598,
+          "dir20_mean": 0.8212669683257918
+        },
+        "learned_weight_mixture": {
+          "n": 884,
+          "coverage": 1.0,
+          "pearson_full_profile_mean": 0.31044523410845626,
+          "pearson_full_profile_median": 0.3089261345084288,
+          "dir20_mean": 0.818947963800905
+        }
+      },
+      "best_single_source_pearson": 0.28407821827700086,
+      "equal_mixture_beats_best_single": true
+    },
+    "rpe1": {
+      "train_contexts": [
+        "hepg2",
+        "jurkat",
+        "k562"
+      ],
+      "learned_weight": {
+        "hepg2": 0.3082485775632404,
+        "jurkat": 0.5336603057897472,
+        "k562": 0.632855752224212
+      },
+      "results": {
+        "single_hepg2": {
+          "n": 651,
+          "coverage": 0.6622583926754833,
+          "pearson_full_profile_mean": 0.3309331564064942,
+          "pearson_full_profile_median": 0.3176497507937646,
+          "dir20_mean": 0.8278801843317973
+        },
+        "single_jurkat": {
+          "n": 740,
+          "coverage": 0.7527975584944049,
+          "pearson_full_profile_mean": 0.24193321102494553,
+          "pearson_full_profile_median": 0.20714362582213436,
+          "dir20_mean": 0.746418918918919
+        },
+        "single_k562": {
+          "n": 660,
+          "coverage": 0.671414038657172,
+          "pearson_full_profile_mean": 0.23707055117768755,
+          "pearson_full_profile_median": 0.20397458354894893,
+          "dir20_mean": 0.7466666666666667
+        },
+        "equal_mixture": {
+          "n": 983,
+          "coverage": 1.0,
+          "pearson_full_profile_mean": 0.33164757249300014,
+          "pearson_full_profile_median": 0.32280761551755044,
+          "dir20_mean": 0.8181078331637843
+        },
+        "learned_weight_mixture": {
+          "n": 983,
+          "coverage": 1.0,
+          "pearson_full_profile_mean": 0.32257288980177423,
+          "pearson_full_profile_median": 0.31543438974578464,
+          "dir20_mean": 0.8112410986775178
+        }
+      },
+      "best_single_source_pearson": 0.3309331564064942,
+      "equal_mixture_beats_best_single": true
+    }
+  },
+  "n_folds_mixture_beats_best_single": 4,
+  "note": "delta_p is a log1p-difference (perturbed minus control pseudobulk); full-profile Pearson is the per-perturbation mean-profile correlation across all genes, the metric comparable to the GEARS-track baseline framing (though that was an unseen-GENE task within one cell line, while this is a known-gene, cross-CELL-LINE task - not directly comparable numbers, same caveat as the smoke test)."
+}
