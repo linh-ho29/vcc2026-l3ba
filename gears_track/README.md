@@ -91,6 +91,59 @@ statistical baseline.
    (only epoch-end summaries were reconstructed) - a good argument for
    logging more defensively this time around.
 
+## `scripts/` - the pipeline code behind the checkpoint above
+
+From a separate handoff (`Biomni_lab_downloads_*.zip`), checked for secrets/
+personal identifiers before adding (clean) - fills in what the original
+handoff above was missing (code, graph-construction, baseline comparisons).
+A `rerun_guide_k562_gears.md` accompanied these scripts but was written for
+a different agent managing the GPU infrastructure directly - not included
+here; it mostly only matters if you're rebuilding the large upstream
+artifacts (raw h5ad, cell graphs, go.csv, coexpression network, splits) that
+live outside this repo.
+
+- `subsample_raw.py`, `run_de.py`, `prepare_gwps_custom.py` - build the
+  10-cells/pert + 2,000-ctrl training subsample from the raw K562 gwps h5ad,
+  streaming (never loads the full ~2M-cell matrix into memory).
+- `precompute_coexpr.py`, `fast_go.py` - rebuild GEARS's two graph-cache
+  files (co-expression network, GO-similarity network) without GEARS's own
+  O(n^2)/dense-matrix implementations, which OOM at this scale.
+- `predict.py` - the actual training/inference driver; pluggable adapters
+  for GEARS, scGPT, and a control-mean reference.
+- `predict_ext.py` - **three simple, non-GNN baselines on the same data**:
+  additive (per-gene mean delta from training perturbations), ridge
+  (multi-output ridge on co-expression features, generalizes to unseen
+  genes), meanshift (one global mean shift for every perturbation).
+- `aggregate_metrics.py`, `compare_models.py` - metrics following the
+  scGPT/GEARS paper conventions, plus lightweight per-perturbation tables.
+- `make_figures_combined.py`, `build_report_k562.py` - figures and a PDF
+  report comparing all of the above.
+- `extract_handoff.py` - the script that produced the original
+  `checkpoints/`/`embeddings/`/`evaluation/`/`validation/` folders above
+  (confirms `manifest.json`/`README.md` were part of its intended output,
+  consistent with what was reconstructed by hand).
+- Not copied here: `ensemble_predict.py` was also in this handoff, but it's
+  byte-identical (verified via SHA-256) to the one already in
+  `unvalidated/ensemble_predict.py` elsewhere in this repo.
+
+### Important: GEARS currently loses to the simple baselines above
+
+Numbers from the accompanying guide (not independently re-run here, but
+worth recording since `predict_ext.py` is the actual code that produced
+them):
+
+| Model | pearson_delta | dir20 |
+|---|---|---|
+| meanshift | 0.0748 | 0.5339 |
+| ridge | 0.0520 | 0.5225 |
+| **GEARS (this checkpoint, 3 epochs)** | **0.028** | **0.286** |
+| additive | 0.0 | 0.0 (degenerate on unseen genes, by design) |
+
+GEARS underperforms both non-GNN baselines by a wide margin at this stage.
+Worth weighing before investing more GPU time in resuming it as-is - 3
+epochs may simply not be enough, or the simple baselines may just be hard
+to beat on this split, but right now the complexity isn't paying for itself.
+
 ## Future direction noted by the user (not yet implemented)
 
 Idea for a possible adapter: use the **statistical signature-transfer
