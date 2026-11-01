@@ -49,6 +49,26 @@ exact same graph the checkpoint was trained on (the other,
 `simulation_42_0.75_0.4_20_coexpression_network.csv`, is only 150 KB and
 still needed - see the retrieval priority list from this conversation).
 
+## `gears_patched_source/` - the exact patched GEARS library (v0.0.2)
+
+This is a vendored, patched copy of the upstream `gears` package (the
+library's own `gears/` source tree, not this repo's code) - included so
+anyone resuming training hits exactly zero of the bugs this patching
+already fixed. Extracted from `gears_patched.tar.gz`; the compiled
+`__pycache__/*.pyc` files in that tarball were dropped (platform/Python-
+version-specific bytecode, no value to commit). Three patches, each
+verified present by grep before including this:
+
+1. `utils.py` (lines 207, 235): `losses = torch.tensor(0.0).to(pred.device)`
+   - fixes a crash on empty training batches.
+2. `pertdata.py`: `create_dataset_file` - avoids a 7,619x deep-copy OOM by
+   not materializing every cell graph in memory at once.
+3. `gears.py` (line 340): hardcoded
+   `torch.save(self.model.state_dict(), '/workspace/preds_full/gears/ckpt_last.pt')`
+   in `train()` - saves a checkpoint every epoch instead of only at the end,
+   and skips a per-epoch train-loader eval pass. **The save path is
+   hardcoded** - edit it or keep that exact `out_dir` when reusing this.
+
 ## Current state (honest numbers, from `evaluation/metrics.json`)
 
 Test split: `simulation_seed42_test_unseen_single`, 1,905 perturbations,
