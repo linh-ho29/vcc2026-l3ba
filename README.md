@@ -23,11 +23,12 @@
   (`experiments/*.json`), and status/decision reports (`reports/`). Read
   `vcc_agent_harness/reports/CURRENT_STATUS.md` for the current state of
   every experiment (E00-E10) and which one is the champion.
-- `gears_track/` - standalone GEARS/GNN training handoff (3 epochs, paused for
-  GPU infrastructure reasons), kept separate from `PertAdapt/`. Checkpoint,
-  embeddings, and honest (modest) metrics for future resumption - see
-  `gears_track/README.md`, which also records a proposed future adapter
-  (statistical baseline for perturbed cells + GEARS for control-cell state).
+- GEARS/GNN training work lives on the separate `GEARS` branch
+  (`gears_track/` there), not on this branch - kept apart deliberately so the
+  statistical and GEARS tracks stay independently reviewable. A future
+  adapter combining them (statistical baseline for perturbed cells, GEARS
+  for control-cell state) is proposed in `gears_track/README.md` on that
+  branch, not yet started.
 - `PertAdapt/` - git submodule, a separate deep-learning track (paused).
 - `data/`, `predictions/` - gitignored (large files); `data/manifests/` and a
   couple of small provenance manifests are tracked as exceptions.
