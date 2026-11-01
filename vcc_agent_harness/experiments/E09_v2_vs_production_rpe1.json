@@ -1,0 +1,27 @@
+{
+  "n": 1995,
+  "results": {
+    "E01_ungated": {
+      "pearson": 0.48129024378810703,
+      "spearman": 0.6855305870319434,
+      "sign_agreement": 0.9724310776942355
+    },
+    "E03_combined_gate_CHAMPION": {
+      "pearson": 0.5007241174486858,
+      "spearman": 0.6959879691308739,
+      "sign_agreement": 0.9724310776942355
+    },
+    "v1_old_E09_weight": {
+      "pearson": 0.5599611690265409,
+      "spearman": 0.725303384085426,
+      "sign_agreement": 0.9724310776942355
+    },
+    "v2_new_E09_weight": {
+      "pearson": 0.6096536749734536,
+      "spearman": 0.7482661774232647,
+      "sign_agreement": 0.9724310776942355
+    }
+  },
+  "v2_beats_champion": true,
+  "note": "v1 applied with detection_fraction/source_target_similarity mean-imputed (not computable from the raw-bulk-only feature basis used here) - v1's own number should be read as approximate; v2 uses its full native feature set exactly as trained, no imputation needed."
+}

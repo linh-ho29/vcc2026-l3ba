@@ -1,0 +1,17 @@
+{
+  "n_pooled_training_rows": 79704,
+  "n_unique_genes": 6642,
+  "train_r2": 0.43339346021157077,
+  "coefficients": {
+    "baseline_expression": 0.02659126977207502,
+    "percentile": 0.019991481943020434,
+    "pathway_ribosomal": 0.005542721212975256,
+    "pathway_mitochondrial": 0.0018189167617169472,
+    "pathway_histone": 0.0013177184676270207,
+    "pathway_hemoglobin": 0.0,
+    "is_perturbation_target": 0.0,
+    "intercept": 0.6035895140293106
+  },
+  "l2_regularization": 10.0,
+  "note": "Pooled across all 4 official unseen_ctx folds' internal train-context relationships - never uses any fold's held-out test context. v1 (predictions/context_weight_model.npz) was fit on the single K562<->RPE1 pair only; this version pools 12 (fold, target-context) reliability vectors across all 4 Arc PIE contexts."
+}

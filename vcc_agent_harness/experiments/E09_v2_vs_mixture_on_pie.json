@@ -1,0 +1,25 @@
+{
+  "folds": {
+    "hepg2": {
+      "equal_mixture_pearson_mean": 0.34196493703772696,
+      "v2_weighted_pearson_mean": 0.346879770775426,
+      "v2_beats_equal": true
+    },
+    "jurkat": {
+      "equal_mixture_pearson_mean": 0.29425541318057724,
+      "v2_weighted_pearson_mean": 0.3047695228329881,
+      "v2_beats_equal": true
+    },
+    "k562": {
+      "equal_mixture_pearson_mean": 0.3125288411372246,
+      "v2_weighted_pearson_mean": 0.32183615161421164,
+      "v2_beats_equal": true
+    },
+    "rpe1": {
+      "equal_mixture_pearson_mean": 0.3316475724789464,
+      "v2_weighted_pearson_mean": 0.34293803613077484,
+      "v2_beats_equal": true
+    }
+  },
+  "n_folds_v2_beats_equal_mixture": 4
+}
