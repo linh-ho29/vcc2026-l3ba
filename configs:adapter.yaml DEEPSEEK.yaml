@@ -1,0 +1,43 @@
+# Adapter architecture config. All dims explicit for reproducibility.
+arch:
+  gears_dim: 32
+  scgpt_dim: 512
+  scgpt_proj_dim: 32
+  control_dim: 32
+  pert_repr_dim: 32
+  ctrl_repr_dim: 32
+  fusion_dim: 64
+  resp_proj_dim: 32
+  resp_hidden: [64, 32]
+  dropout: 0.1
+  # H7 switches (default off -> spec baseline)
+  h7_mode: false
+  n_phases: 4            # G1, S, G2, M when h7_mode=True
+
+modalities:
+  use_gears: true
+  use_scgpt: true
+  use_gears_effects: false   # optional blending of GEARS-predicted effect
+
+inference:
+  batch_size: 8
+  gene_chunk_size: 2048
+  device: "cpu"
+  dtype: "float32"
+  deterministic: true
+
+train:
+  lr: 1.0e-3
+  weight_decay: 1.0e-4
+  max_epochs: 20
+  patience: 4
+  grad_clip: 1.0
+  lambda_all: 1.0
+  lambda_de: 0.0
+  lambda_disc: 0.0
+  huber_delta: 1.0
+  seed: 0
+
+units:
+  effect_units: "log1p_normalized"
+  expression_units: "log1p_normalized"

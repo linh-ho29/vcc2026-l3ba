@@ -1,0 +1,22 @@
+hybrid_perturbation_adapter/
+├── README.md
+├── pyproject.toml
+├── configs/adapter.yaml
+├── src/hybrid_adapter/
+│   ├── __init__.py
+│   ├── schemas.py
+│   ├── model.py
+│   ├── losses.py
+│   ├── train.py
+│   ├── inference.py
+│   ├── checkpoint.py
+│   ├── metrics.py
+│   └── synthetic.py
+├── examples/synthetic_demo.py
+├── tests/
+│   ├── test_forward.py
+│   ├── test_missing_inputs.py
+│   ├── test_training.py
+│   ├── test_checkpoint.py
+│   └── test_inference.py
+└── reports/synthetic_test_results.md
