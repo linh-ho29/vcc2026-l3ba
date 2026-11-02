@@ -1,0 +1,53 @@
+# Hybrid MLP Perturbation Adapter — configuration
+# All defaults follow the development assignment. Synthetic phase only:
+# do not point this config at real biological data until the out-of-fold
+# statistical baseline requirement is satisfied.
+
+model:
+  # Input modality dimensions
+  gears_dim: 32
+  scgpt_dim: 512
+  control_dim: 32
+  latent_dim: 32
+  fusion_dim: 64
+  hidden_dim: 64
+  dropout: 0.1
+
+  # "both" | "scgpt_only" | "gears_only" | "auto"
+  perturbation_mode: auto
+
+  # Units the model expects; batches declaring other units are rejected.
+  effect_units: log2_fold_change
+  expression_units: log1p_cpm
+
+  # --- H7 subpopulation extension ---
+  # response_mode: "whole_line" (docx-spec adapter, ablation M0)
+  #             or "subpopulation" (ablation M1-M4)
+  response_mode: whole_line
+  n_phases: 4
+  # alpha_mode: "global" (M1) | "phase_shared" (M2/M4) | "phase_per_line" (M3)
+  alpha_mode: phase_shared
+  # M4: gate the invariant component by composition similarity (CompSim).
+  composition_weighting: false
+
+  # Inference
+  gene_chunk_size: 4096
+
+training:
+  lr: 1.0e-3
+  weight_decay: 1.0e-4
+  max_epochs: 20
+  patience: 4
+  grad_clip: 1.0
+  seed: 0
+  # Loss weights — DE weighting and discrimination disabled initially.
+  lambda_all: 1.0
+  lambda_de: 0.0
+  lambda_disc: 0.0
+  disc_temperature: 0.1
+  checkpoint_path: null
+  resume_path: null
+
+inference:
+  gene_chunk_size: 4096
+  device: cpu
