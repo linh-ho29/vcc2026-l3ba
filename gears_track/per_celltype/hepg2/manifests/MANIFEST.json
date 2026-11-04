@@ -1,0 +1,63 @@
+{
+  "files": {
+    "split_manifest.json": {
+      "sha256": "f327cbc6e16bddc8c00a09bab7f0175bf0ec717e12c4046cd1a1eb34241ab00a",
+      "bytes": 4326
+    },
+    "dataset_manifest.json": {
+      "sha256": "5ce16dee49f518ec6e1041c2a4ef2ccbcf5b11424802f24c73ec90870bebe012",
+      "bytes": 1297
+    },
+    "epoch8_checkpoint.pt": {
+      "sha256": "574cbdf11640c37eef2f73dd70008f9dfa63cfb002b431ded644d4ac17e7dbda",
+      "bytes": 13775894
+    },
+    "best_checkpoint.pt": {
+      "sha256": "23eedb4833cb206ec43c9826ab6f02f76a69fedc4af360c565ca35d5fcf50042",
+      "bytes": 13775894
+    },
+    "gene_embeddings.npz": {
+      "sha256": "ea3f557e785179b536e4b8d264373bf7c599956e8d912db4f497e717c3ac7931",
+      "bytes": 689361
+    },
+    "perturbation_embeddings.npz": {
+      "sha256": "117ce3805a5f35402e7fae33dc9d23b09d60f38d8e70ac594eb1bd844dcd49f9",
+      "bytes": 3307465
+    },
+    "heldout_effect_predictions.npz": {
+      "sha256": "8b6b73e6b1f9af5c90dd445bb4f03814d8f2c5f7f58651fb7a2faea4e5d8c7ec",
+      "bytes": 802245
+    },
+    "metrics_by_perturbation.csv": {
+      "sha256": "8a3a1a6b2b57058f98329cdc769b688215d95247aa527fae5a44de697376393a",
+      "bytes": 3321
+    },
+    "training_history.csv": {
+      "sha256": "c9bf426f855caccc511cdb4341fda6090a0c35fd5686c3c74d56f2a5afe66ee7",
+      "bytes": 1176
+    },
+    "checkpoint_validation_metrics.csv": {
+      "sha256": "c7f970104fa72bcb4279bfa5c6b66c80bb26d1daeada44ace297d35ea2c27a6e",
+      "bytes": 1025
+    },
+    "metrics_summary.json": {
+      "sha256": "c4c12df237ecd28092c70ba2203bc705e8528e41b78f090f002bd776e7f0aa63",
+      "bytes": 2777
+    },
+    "representation_analysis.json": {
+      "sha256": "90644e3f850910954ee0923f03ac9ea0986f2958bd0d297fd329d9cede619a89",
+      "bytes": 1135
+    }
+  },
+  "missing": [
+    "train.py",
+    "prepare_data.py",
+    "predict.py",
+    "evaluate.py",
+    "export_outputs.py",
+    "config.yaml",
+    "requirements.txt",
+    "README.md"
+  ],
+  "arm": "depth_100x150 (100 targets x 150 cells, seed 42, identical GEARS config)"
+}

@@ -1,0 +1,32 @@
+{
+  "gene_embeddings": {
+    "dim": 32,
+    "effective_rank_pre_graph": 9.374600410461426,
+    "effective_rank_post_graph": 1.0030347108840942,
+    "norm_mean_pre": 0.0031122020445764065,
+    "norm_mean_post": 1.7504356719655334e-06
+  },
+  "perturbation_embeddings": {
+    "effective_rank_pre_graph": 17.843048095703125,
+    "effective_rank_post_graph": 4.487630844116211,
+    "effective_rank_fused": 2.8421854972839355,
+    "cosine_similarity_fused_heldout": {
+      "mean": 0.9626612116461624,
+      "std": 0.08813792151042858,
+      "p5": 0.6991164586318195,
+      "p95": 0.9999917840585466
+    },
+    "norm_mean_fused": 0.1486278921365738
+  },
+  "heldout_graph_connectivity": {
+    "mean_go_degree": 21.95,
+    "mean_train_target_neighbors": 0.3,
+    "fraction_with_train_neighbor": 0.2
+  },
+  "coverage_vs_quality": {
+    "spearman_cells_vs_pearson_delta": null,
+    "note": "coverage is constant across held-out targets (all at the 150-cell cap); coverage-quality relationship not estimable in this design",
+    "n": 10
+  },
+  "note_32d_vs_64d": "32-dim used per spec; no claim made that 32-d outperforms 64-d without evidence"
+}

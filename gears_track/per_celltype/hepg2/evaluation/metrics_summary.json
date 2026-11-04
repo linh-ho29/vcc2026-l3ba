@@ -1,0 +1,74 @@
+{
+  "best_epoch": 2,
+  "selection_criterion": "validation mse_de (GEARS official criterion)",
+  "validation_metrics": {
+    "2": {
+      "mse": 0.004992102412506938,
+      "pearson": 0.988050314382279,
+      "mse_de": 0.12277056528255344,
+      "pearson_de": 0.9610068123354722,
+      "pearson_delta": 0.21650426192334488,
+      "spearman_delta": 0.1435185810267245,
+      "mse_delta": 0.004992102412506938,
+      "top20_de_direction_acc": 0.675,
+      "calibration_slope": 0.47371618577841595,
+      "calibration_intercept": -0.0009291185590113151,
+      "mse_delta_ctrl_only": 0.004942351847421378
+    },
+    "4": {
+      "mse": 0.005044889845885336,
+      "pearson": 0.9879226110810719,
+      "mse_de": 0.12679981617257,
+      "pearson_de": 0.959276791506818,
+      "pearson_delta": 0.1838549640941065,
+      "spearman_delta": 0.12026232146568261,
+      "mse_delta": 0.005044889845885336,
+      "top20_de_direction_acc": 0.68,
+      "calibration_slope": 0.43052374705404867,
+      "calibration_intercept": 0.00029658685462732566,
+      "mse_delta_ctrl_only": 0.0049423517833929505
+    },
+    "6": {
+      "mse": 0.005037718440871686,
+      "pearson": 0.9879265276521506,
+      "mse_de": 0.1270222776569426,
+      "pearson_de": 0.9591650098347599,
+      "pearson_delta": 0.18705653900598845,
+      "spearman_delta": 0.12517577181340644,
+      "mse_delta": 0.0050377182546071705,
+      "top20_de_direction_acc": 0.6950000000000001,
+      "calibration_slope": 0.42946683560405674,
+      "calibration_intercept": 0.00023976957138212225,
+      "mse_delta_ctrl_only": 0.0049423517833929505
+    },
+    "8": {
+      "mse": 0.005047233530785888,
+      "pearson": 0.9878978108083893,
+      "mse_de": 0.12761310203932225,
+      "pearson_de": 0.9588919707941386,
+      "pearson_delta": 0.18321002935698952,
+      "spearman_delta": 0.12369427954155143,
+      "mse_delta": 0.005047233530785888,
+      "top20_de_direction_acc": 0.6900000000000001,
+      "calibration_slope": 0.41832169872291836,
+      "calibration_intercept": 0.0002780451069713615,
+      "mse_delta_ctrl_only": 0.004942351678619161
+    }
+  },
+  "test_metrics_best_model": {
+    "mse": 0.005079563276376575,
+    "pearson": 0.9877717646985541,
+    "mse_de": 0.1473708987236023,
+    "pearson_de": 0.9412430413052789,
+    "pearson_delta": 0.2702424044122873,
+    "spearman_delta": 0.19028086429183644,
+    "mse_delta": 0.005079563276376575,
+    "top20_de_direction_acc": 0.6599999999999999,
+    "calibration_slope": 0.6630187810448389,
+    "calibration_intercept": -0.002918061146338189,
+    "mse_delta_ctrl_only": 0.005562325561186299,
+    "mse_delta_mean_shift": 0.004189185181166977,
+    "pearson_delta_mean_shift": 0.4419305868662914
+  },
+  "note": "delta metrics prioritized; absolute-expression metrics also recorded"
+}

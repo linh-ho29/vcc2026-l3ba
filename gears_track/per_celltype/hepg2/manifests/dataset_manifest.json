@@ -1,0 +1,33 @@
+{
+  "source": "GEO GSE264667, GSE264667_hepg2_raw_singlecell_01.h5ad (Nadig et al. 2025, Nat Genet)",
+  "source_note": "scperteval hosted copy (nadig25hepg2) is a requester-pays GCS object and stores log-normalized X only; the GEO raw single-cell file is used instead and contains raw counts.",
+  "raw_shape": [
+    145473,
+    9624
+  ],
+  "raw_x_dtype": "float32",
+  "raw_counts_verified_integer": true,
+  "perturbation_column": "obs['gene'] (gene symbol); obs['gene_id'] provides Ensembl IDs",
+  "control_label": "non-targeting",
+  "control_cells_in_raw": 4976,
+  "targets_in_raw": 2393,
+  "working_shape": [
+    17000,
+    5000
+  ],
+  "expression_scale": {
+    "X": "normalize_total(target_sum=1e4) then log1p (official GEARS convention), float32 sparse CSR",
+    "layers['counts']": "raw integer counts, float32 sparse CSR"
+  },
+  "gene_panel": {
+    "method": "scanpy highly_variable_genes, n_top_genes=5000, computed on working subset log1p X",
+    "n_genes": 5000,
+    "var_names": "Ensembl gene IDs; var['gene_name'] holds symbols"
+  },
+  "gears_fields": {
+    "obs['condition']": "'ctrl' or 'GENE+ctrl'",
+    "obs['cell_type']": "'HepG2'",
+    "obs['split']": "'train' | 'val' | 'test' | 'ctrl'"
+  },
+  "additional_qc": "none beyond the authors' processed release (documented decision)"
+}
