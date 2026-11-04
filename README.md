@@ -1,12 +1,3 @@
-Contributions: 
-1. Linh: project manager, data context and engineering as well as advanced inference engineering and contribute to form a scientifically sound hypothesis
-2. Aretha: train GEARS with K562 data, form scientifically sound hypothesis and build a fusion adapter to fit with the hypothesis. 
-3. Courtney: train GEARS with RPE1 data
-4. Lawrence: train GEARS with HepG2 with broad pertubation sampling
-5. Buu: form scientifically sound hypothesis regarding gene ontology graph and Markov chains
-6. Lerie: pinpoint LLM platforms that can be helpful for this project
-7. Sang: for training team members on basic concepts of bioinformatics and strategizing data engineering
-
 ## System architecture: gated latent multi-context fusion
 
 Two phases. Phase 1 runs once, offline, CPU-only (or a free T4) and produces
@@ -75,3 +66,14 @@ Phase 1's per-cell-type GEARS models (k562, hepg2) exist on the `GEARS`
 branch; rpe1 (Courtney) and the fusion adapter itself (Aretha) are tracked
 on their own branches and not yet merged in here. The control-cell VAE/PCA
 (Phase 1's other half) is not yet built anywhere in this repo. 
+
+
+
+Contributions: 
+1. Linh: project manager, data context and engineering as well as advanced inference engineering and contribute to form a scientifically sound hypothesis
+2. Aretha: train GEARS with K562 data, form scientifically sound hypothesis and build a fusion adapter to fit with the hypothesis. 
+3. Courtney: train GEARS with RPE1 data
+4. Lawrence: train GEARS with HepG2 with broad pertubation sampling
+5. Buu: form scientifically sound hypothesis regarding gene ontology graph and Markov chains
+6. Lerie: pinpoint LLM platforms that can be helpful for this project
+7. Sang: for training team members on basic concepts of bioinformatics and strategizing data engineering
