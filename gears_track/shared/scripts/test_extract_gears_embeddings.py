@@ -1,9 +1,18 @@
 """Tests for extract_gears_embeddings.py's standardization and merge logic.
 Synthetic data only - no real checkpoints needed."""
+import csv
+import tempfile
+from pathlib import Path
+
 import numpy as np
 import torch
 
-from extract_gears_embeddings import make_fixed_projection, merge_cell_lines, standardize_dim
+from extract_gears_embeddings import (
+    from_representations_npz,
+    make_fixed_projection,
+    merge_cell_lines,
+    standardize_dim,
+)
 
 CELL_LINES = ["K562", "HepG2", "RPE1", "Jurkat"]
 
@@ -79,7 +88,7 @@ def test_merge_gene_in_no_line_is_excluded_not_zero_filled():
     assert all("GENE_NOWHERE" not in d for d in [emb])
 
 
-def test_merge_rpe1_always_masked_when_absent():
+def test_merge_masks_when_source_absent_for_gene():
     per_line = {
         "K562": {"GENE_E": np.array([1.0], dtype=np.float32)},
         "HepG2": {"GENE_E": np.array([1.0], dtype=np.float32)},
@@ -88,6 +97,44 @@ def test_merge_rpe1_always_masked_when_absent():
     }
     emb, mask = merge_cell_lines(per_line, CELL_LINES, d_pert=1)
     assert mask["GENE_E"][2].item() == 0.0
+
+
+def test_from_representations_npz_aligns_by_row_order():
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        embeddings = np.array([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]], dtype=np.float32)
+        npz_path = tmp / "representations.npz"
+        np.savez(npz_path, target_fused=embeddings, other_array=embeddings * 0)
+        index_csv = tmp / "target_index.csv"
+        with open(index_csv, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["target_index", "gene_symbol"])
+            writer.writerow([0, "GENE_X"])
+            writer.writerow([1, "GENE_Y"])
+            writer.writerow([2, "GENE_Z"])
+
+        result = from_representations_npz(npz_path, index_csv, array_key="target_fused")
+
+        assert set(result.keys()) == {"GENE_X", "GENE_Y", "GENE_Z"}
+        assert np.array_equal(result["GENE_Y"], np.array([3.0, 4.0], dtype=np.float32))
+
+
+def test_from_representations_npz_raises_on_row_mismatch():
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp = Path(tmp)
+        npz_path = tmp / "representations.npz"
+        np.savez(npz_path, target_fused=np.zeros((2, 2), dtype=np.float32))
+        index_csv = tmp / "target_index.csv"
+        with open(index_csv, "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["target_index", "gene_symbol"])
+            writer.writerow([0, "GENE_X"])
+
+        try:
+            from_representations_npz(npz_path, index_csv, array_key="target_fused")
+            assert False, "expected ValueError on row-count mismatch"
+        except ValueError:
+            pass
 
 
 if __name__ == "__main__":

@@ -6,8 +6,7 @@ each producing extracted perturbation vectors `e_p^(k)` for cell type `k`.
 Phase 1's other half (control-cell VAE/PCA -> NTC latents `z_0`) and the
 rest of Phase 2 now live on the `gated-fusion-work` branch (the
 `hybrid_adapter` package), not here - this track is purely the per-cell-type
-GEARS models and the tooling to extract/merge their embeddings. RPE1
-(Courtney's track) has no checkpoint or extracted embeddings here yet.
+GEARS models and the tooling to extract/merge their embeddings.
 
 ## Layout
 
@@ -16,7 +15,8 @@ gears_track/
 ├── per_celltype/
 │   ├── k562/        # complete - see per_celltype/k562/README.md
 │   ├── hepg2/        # partial - see per_celltype/hepg2/README.md and the gap noted below
-│   └── jurkat/       # complete - see per_celltype/jurkat/README.md
+│   ├── jurkat/       # complete - see per_celltype/jurkat/README.md
+│   └── rpe1/         # complete, but degenerate - see the rpe1 section below
 ├── merged/
 │   └── gears_embeddings_merged.h5   # output of shared/scripts/extract_gears_embeddings.py
 └── shared/
@@ -91,6 +91,30 @@ GitHub's limit) and the checkpoint-only `checkpoints/epoch{1..8}` sweep
 matching the hepg2/k562 convention) - available locally in
 `~/Downloads/jurkat_gears/` if needed.
 
+## rpe1 (`per_celltype/rpe1/`)
+
+From Courtney's full 8-epoch handoff (`courtneychen` branch,
+`gears_adapter_ready/`). The actual embeddings export
+(`embeddings/representations.npz` + `target_index.csv`) isn't in that git
+tree - it ships as a separate ~543 MB GitHub Release
+(`gears-rpe1-8epoch-v1`) because of size. Only `representations.npz` and
+`target_index.csv` are copied here (3.1 MB); sha256 verified against her
+`trained_handoff_manifest.json` before use, consistent with her own
+handoff's security guidance (precomputed arrays only, no `torch.load` on the
+raw `.pt` checkpoints).
+
+`representations.npz["target_fused"]` ([9853, 32]) is the real post-GNN
+fused perturbation embedding - the same quantity extracted for the other 3
+lines - and covers the full 9,853-perturbation vocabulary, not a subset.
+**But** per her own `reports/embedding_diagnostics.csv`, `target_fused` has
+**effective rank ≈1.0 out of its nominal 32 dimensions**, at both the
+validation-best (epoch 3) and final (epoch 8) checkpoints - i.e. it is
+close to a single repeated scalar, not 32 independent features. The merge
+script's `standardize_dim` projection to 64-d does not fix this: it's a
+dimension change, not a rank increase. Treat RPE1's slot in the merged
+table as real coverage with very low information content, not on par with
+the other 3 lines.
+
 ## `merged/gears_embeddings_merged.h5`
 
 Output of `shared/scripts/extract_gears_embeddings.py`: standardizes each
@@ -101,9 +125,10 @@ projection for hepg2 and jurkat, both 32-d) and merges into one
 with a `[n_genes, 4]` binary mask (1 = real, 0 = imputed). Missing
 cell-line/gene combinations are imputed with the cross-line mean of
 whichever lines ARE available for that gene - never zero-filled, per this
-project's established convention. RPE1 has mask=0 for every single gene
-(no RPE1 model exists anywhere in this project yet); 11,632 genes have at
-least one real source, mean coverage 0.496 across all (gene, cell-line)
-pairs. "post-GNN" is defined precisely in the script's own docstring, not
-assumed - it's the output of GEARS's `pert_fuse(sim_layers(pert_emb(...)))`,
-matching what each handoff already saved as `*_fused`/`post_graph` arrays.
+project's established convention. 11,632 genes have at least one real
+source; mean coverage is 0.708 across all (gene, cell-line) pairs (up from
+0.496 before RPE1 was wired in - RPE1 alone covers all 9,853 of its
+perturbation-vocabulary genes, though see the rank caveat above). "post-GNN"
+is defined precisely in the script's own docstring, not assumed - it's the
+output of GEARS's `pert_fuse(sim_layers(pert_emb(...)))`, matching what
+each handoff already saved as `*_fused`/`post_graph`/`target_fused` arrays.

@@ -31,11 +31,21 @@ Gaussian random projection for anything narrower (HepG2, Jurkat: 32-d);
 truncation for anything wider. Fixed and seeded so it's reproducible, not
 fit to any particular cell line's data.
 
-RPE1 has no checkpoint or extracted embeddings available anywhere in this
-project as of this run (Courtney's track) - every gene's RPE1 slot is
-imputed from the cross-line mean of whichever other lines ARE available
-for that gene, with mask[2]=0 for every row, exactly as the missing-source
-case the task specifies, not a special case.
+RPE1: Courtney's full epoch-8 embeddings export (gears_adapter_ready/
+embeddings/representations.npz on her courtneychen branch) was not in the
+pushed git tree - it ships separately as a ~543MB GitHub Release
+(gears-rpe1-8epoch-v1) because of size. The release's representations.npz +
+target_index.csv give a real target_fused vector (the post-GNN fused
+perturbation embedding, same quantity as the other 3 lines) for all 9,853
+perturbation-vocabulary genes; sha256 verified against her
+trained_handoff_manifest.json before use. IMPORTANT CAVEAT (from her own
+reports/embedding_diagnostics.csv, carried through standardize_dim as a
+dimension change only - it does not fix this): target_fused has effective
+rank ~1.0 out of its nominal 32 dimensions at both epoch 3 and epoch 8 -
+i.e. it is close to a single scalar repeated across 32 coordinates, not 32
+independent features. Treat RPE1's slot in the merged table as real
+coverage but very low information content, not on par with the other 3
+lines' embeddings.
 """
 from __future__ import annotations
 
@@ -86,6 +96,28 @@ def from_precomputed_embeddings_split(
     if len(genes) != embeddings.shape[0]:
         raise ValueError(
             f"{index_csv}: {len(genes)} rows but {embeddings_path} has {embeddings.shape[0]}."
+        )
+    return dict(zip(genes, embeddings))
+
+
+def from_representations_npz(
+    npz_path: Path, index_csv: Path, array_key: str, gene_col: str = "gene_symbol"
+) -> Dict[str, np.ndarray]:
+    """Variant for Courtney's RPE1 export: a multi-array representations.npz
+    (gene_lookup/target_pre_go/target_post_go/target_fused/...) plus a
+    separate target_index.csv mapping row -> gene_symbol. Pulls a single
+    named array (``target_fused``, the post-GNN fused perturbation
+    embedding) and aligns it to gene symbols by row order."""
+    import csv
+    data = np.load(npz_path)  # plain numeric arrays only, no allow_pickle
+    embeddings = np.asarray(data[array_key], dtype=np.float32)
+    genes = []
+    with open(index_csv) as f:
+        for row in csv.DictReader(f):
+            genes.append(row[gene_col])
+    if len(genes) != embeddings.shape[0]:
+        raise ValueError(
+            f"{index_csv}: {len(genes)} rows but {npz_path}[{array_key}] has {embeddings.shape[0]}."
         )
     return dict(zip(genes, embeddings))
 
@@ -271,10 +303,15 @@ def main():
     )
     per_line["Jurkat"] = {g: standardize_dim(v[None, :], D_PERT)[0] for g, v in jurkat_raw.items()}
 
-    print("RPE1: no checkpoint or extracted embeddings available in this project yet "
-          "(Courtney's track) - every gene's RPE1 slot will be imputed from the cross-line "
-          "mean of whichever other lines have it, mask=0 for all genes.", flush=True)
-    per_line["RPE1"] = {}
+    print("RPE1: loading representations.npz[target_fused] (32-d, real coverage over all "
+          "9,853 perturbation-vocabulary genes, but effective rank ~1.0 - see module "
+          "docstring); projecting 32-d -> 64-d", flush=True)
+    rpe1_dir = GEARS_TRACK_ROOT / "per_celltype" / "rpe1" / "embeddings"
+    rpe1_raw = from_representations_npz(
+        rpe1_dir / "representations.npz", rpe1_dir / "target_index.csv",
+        array_key="target_fused", gene_col="gene_symbol",
+    )
+    per_line["RPE1"] = {g: standardize_dim(v[None, :], D_PERT)[0] for g, v in rpe1_raw.items()}
 
     for line in CELL_LINES:
         print(f"  {line}: {len(per_line.get(line, {}))} genes", flush=True)
