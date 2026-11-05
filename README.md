@@ -63,9 +63,27 @@ head projects to `R^G` (G genes) as predicted expression `y_hat_pert`.
 ### Status
 
 Phase 1's per-cell-type GEARS models (k562, hepg2) exist on the `GEARS`
-branch; rpe1 (Courtney) and the fusion adapter itself (Aretha) are tracked
-on their own branches and not yet merged in here. The control-cell VAE/PCA
-(Phase 1's other half) is not yet built anywhere in this repo. 
+branch; rpe1 (Courtney) is tracked on its own branch and not yet merged in
+here.
+
+Everything else in this diagram - the gated multi-context fusion, the
+control-cell branch (frozen scGPT pooling + PCA, since no VAE was needed:
+sampling real encoded control cells empirically makes a generative prior
+unnecessary), the discrete latent flow block, the decoder, and the Sliced
+Wasserstein loss - is implemented on top of Aretha's adapter package
+(`src/hybrid_adapter`), as a second model (`GatedFusionFlowAdapter`)
+alongside the original `HybridAdapter` (`corrected = stat + residual`,
+untouched). Verified end to end against real data - 2,000 real HepG2
+control cells, the real fine-tuned scGPT embeddings (frozen, used as an
+offline feature extractor per direction - though this project's own
+evaluation found the fine-tune didn't measurably beat frozen embeddings
+under its probe, worth knowing before expecting much from that choice
+alone), and real k562+hepg2 GEARS embeddings for 2,122 overlapping genes -
+but only as a forward-pass compatibility check (no training, no gradients
+against real data, per the package's synthetic-phase scope). This work
+currently lives on a local branch forked from `Aretha_phylo`
+(`gated-fusion-work`), not yet pushed - ask Linh/Claude for the current
+state if you need it before it's merged.
 
 
 
