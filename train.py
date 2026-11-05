@@ -40,13 +40,17 @@ from losses.swd import sliced_wasserstein_distance
 from models.virtual_cell import VirtualCellModel
 from src.config import ModelConfig, TrainingConfig
 
-CELL_LINES = ["K562", "HepG2", "RPE", "Jurkat"]
-CELL_LINE_TO_IDX = {line: i for i, line in enumerate(CELL_LINES)}
+CELL_LINES = ["K562", "HepG2", "RPE", "Jurkat"]  # example/default only - see PerturbSeqDataset.cell_lines
 
 
 class PerturbSeqDataset:
     """Groups perturbed cells by ``(gene, cell_line)`` condition; samples
     unpaired NTC control cells strictly from the same cell line.
+
+    ``cell_lines``/``cell_line_to_idx`` are derived from whatever cell-line
+    labels actually appear in ``obs_df`` - NOT the module-level ``CELL_LINES``
+    constant, which is just a 4-line example. A dataset built with a 5th
+    (or differently-named) context works without any code change here.
 
     Not a ``torch.utils.data.Dataset`` - there's no meaningful per-index
     ``__getitem__`` here (a "batch" is scoped to one condition, not one
@@ -87,10 +91,21 @@ class PerturbSeqDataset:
         self.gears_pert_bank = gears_pert_bank
         self.stat_delta_bank = stat_delta_bank
 
+        self.cell_lines: List[str] = sorted({cl for _, cl in self.condition_keys})
+        self.cell_line_to_idx: Dict[str, int] = {cl: i for i, cl in enumerate(self.cell_lines)}
+
     def __len__(self) -> int:
         return len(self.condition_keys)
 
-    def sample_batch(self, gene: str, cell_line: str, batch_size: int = 256) -> Dict[str, Tensor]:
+    def sample_batch(
+        self, gene: str, cell_line: str, batch_size: int = 256,
+        cell_line_to_idx: Optional[Dict[str, int]] = None,
+    ) -> Dict[str, Tensor]:
+        """``cell_line_to_idx``: override the index mapping (e.g. pass the
+        TRAINING dataset's mapping when sampling from a held-out/val dataset,
+        so both share the same context_embedding row per cell line even if
+        this dataset's own ``cell_lines`` differ in membership or order)."""
+        idx_map = cell_line_to_idx if cell_line_to_idx is not None else self.cell_line_to_idx
         pert_indices = self.groups[(gene, cell_line)]
         chosen_pert = torch.randint(0, len(pert_indices), (batch_size,))
         idx_p = pert_indices[chosen_pert.numpy()]
@@ -109,7 +124,7 @@ class PerturbSeqDataset:
         return {
             "z_0": z_0, "x_ctrl": x_ctrl, "z_true": z_true, "y_true": y_true,
             "e_p_stack": e_p_stack, "delta_stat": delta_stat,
-            "cell_line_idx": torch.full((batch_size,), CELL_LINE_TO_IDX[cell_line], dtype=torch.long),
+            "cell_line_idx": torch.full((batch_size,), idx_map[cell_line], dtype=torch.long),
         }
 
 
@@ -157,7 +172,9 @@ def train(
 
     device = torch.device(train_cfg.device if torch.cuda.is_available() or train_cfg.device == "cpu" else "cpu")
     model = VirtualCellModel.from_config(model_cfg).to(device)
-    context_embedding = nn.Embedding(model_cfg.num_cell_lines, model_cfg.d_context).to(device)
+    # Sized from the dataset's actual cell lines, not model_cfg.num_cell_lines (which is
+    # just a default/example) - see PerturbSeqDataset.cell_lines.
+    context_embedding = nn.Embedding(len(dataset.cell_lines), model_cfg.d_context).to(device)
 
     params = list(model.parameters()) + list(context_embedding.parameters())
     optimizer = torch.optim.AdamW(params, lr=train_cfg.lr, weight_decay=train_cfg.weight_decay)
@@ -213,7 +230,8 @@ def train(
 
         val_loss = None
         if val_dataset is not None:
-            val_loss = evaluate(model, context_embedding, val_dataset, device, train_cfg.batch_size)
+            val_loss = evaluate(model, context_embedding, val_dataset, device, train_cfg.batch_size,
+                                 cell_line_to_idx=dataset.cell_line_to_idx)
             history["val_loss"].append(val_loss)
 
         if verbose:
@@ -231,11 +249,15 @@ def train(
 def evaluate(
     model: VirtualCellModel, context_embedding: nn.Embedding, dataset: PerturbSeqDataset,
     device: torch.device, batch_size: int = 64,
+    cell_line_to_idx: Optional[Dict[str, int]] = None,
 ) -> float:
+    """``cell_line_to_idx``: pass the TRAINING dataset's mapping when
+    evaluating on a different (e.g. held-out) dataset - see
+    ``PerturbSeqDataset.sample_batch``."""
     model.eval()
     total_se, total_n = 0.0, 0
     for gene, cell_line in dataset.condition_keys:
-        batch = dataset.sample_batch(gene, cell_line, batch_size=batch_size)
+        batch = dataset.sample_batch(gene, cell_line, batch_size=batch_size, cell_line_to_idx=cell_line_to_idx)
         c_target = context_embedding(batch["cell_line_idx"].to(device))
         out = model(
             batch["e_p_stack"].to(device), c_target, batch["delta_stat"].to(device),

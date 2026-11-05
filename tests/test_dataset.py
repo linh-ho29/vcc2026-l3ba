@@ -70,7 +70,7 @@ def test_sample_batch_condition_level_inputs_constant_within_batch():
     batch = ds.sample_batch("GENE_A", "K562", batch_size=10)
     first = batch["e_p_stack"][0]
     assert all(torch.allclose(first, batch["e_p_stack"][i]) for i in range(10))
-    assert (batch["cell_line_idx"] == CELL_LINES.index("K562")).all()
+    assert (batch["cell_line_idx"] == ds.cell_line_to_idx["K562"]).all()
 
 
 def test_drops_conditions_missing_gears_vector():
@@ -105,3 +105,24 @@ def test_raises_when_no_conditions_survive_filtering():
             ntc_latents, ntc_expr, torch.randn(1, D_LATENT), torch.rand(1, NUM_GENES),
             obs_df, gears_pert_bank={}, stat_delta_bank={},
         )
+
+
+def test_novel_cell_line_label_not_in_global_CELL_LINES_works():
+    """A cell-line label that isn't one of the 4 example names in the
+    module-level CELL_LINES constant must still work end-to-end - indices
+    are derived from the dataset's own data, not that global list."""
+    ds = _make_dataset(genes=("GENE_A",), lines=("SomeNewLine",))
+    assert "SomeNewLine" not in CELL_LINES
+    batch = ds.sample_batch("GENE_A", "SomeNewLine", batch_size=5)
+    assert batch["cell_line_idx"].shape == (5,)
+    assert (batch["cell_line_idx"] == ds.cell_line_to_idx["SomeNewLine"]).all()
+
+
+def test_sample_batch_cell_line_to_idx_override_for_eval_on_different_dataset():
+    """Simulates evaluate()'s use case: a held-out dataset's own sample_batch
+    must use the TRAINING dataset's cell_line_to_idx when passed explicitly,
+    not its own (which could differ in membership/order)."""
+    ds = _make_dataset(genes=("GENE_A",), lines=("LineX",))
+    external_mapping = {"LineX": 7}
+    batch = ds.sample_batch("GENE_A", "LineX", batch_size=3, cell_line_to_idx=external_mapping)
+    assert (batch["cell_line_idx"] == 7).all()
