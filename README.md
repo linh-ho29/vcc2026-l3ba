@@ -86,6 +86,20 @@ not yet merged into `Aretha_phylo` or here) - the new modules live together
 under `src/hybrid_adapter/gated_fusion_flow/`, separate from the original
 Module A-D files, which that branch leaves untouched.
 
+**`virtual-cell-model` branch**: a second, independent implementation of
+this same architecture (`models/virtual_cell.py`, `losses/swd.py`,
+`train.py`), built flat/standalone rather than inside `src/hybrid_adapter`,
+explicitly *without* that package's "synthetic phase only" rule - this one
+is headed toward training on real data and a D/E/F submission, not staying
+a forward-pass-only compatibility check. Architecture-equivalent to
+`GatedFusionFlowAdapter` with some naming/shape differences (an invariant
+skip connection in the GEARS fusion step; the statistical-baseline fusion
+projects back down to 64-d instead of concatenating to 128-d). 32 synthetic
+forward/backward tests passing (`tests/test_forward.py`); `train.py` has
+an explicit, documented set of assumptions about the real on-disk file
+schema (`gears_pert_bank.pt`, `stat_delta_bank.pt`, etc.) that should be
+checked against the real files once they exist.
+
 
 
 Contributions: 
