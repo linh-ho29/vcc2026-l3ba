@@ -2,26 +2,27 @@
 precision, SWD + MSE loss. See models/virtual_cell.py for the model and
 losses/swd.py for the distribution loss.
 
-Dataset schema assumptions (the task spec leaves these implicit - stated
-explicitly here, not guessed silently, so they're easy to correct once the
-real files exist):
+Dataset: ``PerturbSeqDataset`` groups perturbed cells by
+``(gene, cell_line)`` condition via ``obs_df``, and samples NTC control
+cells strictly from the SAME cell line, unpaired (not row-matched to any
+particular perturbed cell). This replaces an earlier version of this file
+that guessed a single cell-line-agnostic NTC pool - that guess was wrong;
+NTC cells are per-cell-line.
+
+Dataset schema (what ``load_dataset_from_disk`` expects on disk):
 
 - ``gears_pert_bank.pt``: ``Dict[gene_id, Tensor[4, 64]]`` - one entry per
   gene, already covering all 4 cell lines (K562, HepG2, RPE, Jurkat order).
-- ``stat_delta_bank.pt``, ``pert_cells.pt``, ``pert_latents.pt``: all three
-  keyed the same way, ``Dict[(gene_id, cell_line_idx), Tensor]`` -
-  ``stat_delta_bank[(g,c)]`` is ``[num_genes]`` (the empirical pseudobulk
-  mean of exactly the cells in ``pert_cells[(g,c)]``); ``pert_cells[(g,c)]``
-  is ``[n_cells, num_genes]``; ``pert_latents[(g,c)]`` is ``[n_cells,
-  d_latent]``, row-aligned with ``pert_cells[(g,c)]``.
-- ``ntc_latents.pt`` / ``ntc_expression.pt``: a single shared pool of
-  control cells, not pre-split by cell line. ``z_0``/``x_ctrl`` for a
-  training example are sampled uniformly at random from this pool,
-  independent of the example's target cell line - control-cell state is
-  being treated as cell-line-agnostic at the latent level here. If the
-  real NTC pool is actually per-cell-line, swap
-  ``PerturbationDataset._sample_ntc`` for a per-line lookup; nothing else
-  changes.
+- ``stat_delta_bank.pt``: ``Dict[(gene_id, cell_line), Tensor[num_genes]]``.
+- ``ntc_latents.pt`` / ``ntc_expression.pt``: ``Dict[cell_line,
+  Tensor[N_ctrl_c, d_latent/num_genes]]`` - one pool per cell line.
+- ``pert_latents.pt`` / ``pert_expression.pt``: flat ``Tensor[N_total_pert,
+  d_latent/num_genes]``, row-aligned with each other and with ``obs.pkl``.
+- ``obs.pkl``: a pickled ``pandas.DataFrame`` with (at least) ``gene`` and
+  ``cell_line`` columns, one row per perturbed cell, same row order as
+  ``pert_latents``/``pert_expression``. Not part of the task spec's
+  original file list - added here because grouping perturbed cells by
+  condition needs it; stated explicitly rather than assumed silently.
 - ``c_target``: NOT read from disk - a learned ``nn.Embedding(4, d_context)``
   over the 4 cell lines, trained jointly with the rest of the model (per
   the spec's "Learned target cell line embedding").
@@ -29,21 +30,23 @@ real files exist):
 
 from __future__ import annotations
 
+import pickle
 import random
 from contextlib import nullcontext
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Tuple
 
+import pandas as pd
 import torch
 from torch import Tensor, nn
-from torch.utils.data import DataLoader, Dataset
 
 from losses.swd import sliced_wasserstein_distance
 from models.virtual_cell import VirtualCellModel
 
 CELL_LINES = ["K562", "HepG2", "RPE", "Jurkat"]
 NUM_CELL_LINES = len(CELL_LINES)
+CELL_LINE_TO_IDX = {line: i for i, line in enumerate(CELL_LINES)}
 
 
 @dataclass
@@ -63,80 +66,101 @@ class TrainConfig:
     use_amp: bool = True
 
 
-class PerturbationDataset(Dataset):
-    """One example = one (perturbed cell, random NTC control cell) pair.
+class PerturbSeqDataset:
+    """Groups perturbed cells by ``(gene, cell_line)`` condition; samples
+    unpaired NTC control cells strictly from the same cell line.
 
-    ``len(dataset)`` is the total number of perturbed cells across every
-    (gene, cell_line) key in ``pert_cells`` - every real perturbed cell is
-    visited (in expectation, once per epoch), not just one per gene.
+    Not a ``torch.utils.data.Dataset`` - there's no meaningful per-index
+    ``__getitem__`` here (a "batch" is scoped to one condition, not one
+    row), so the training loop below iterates ``condition_keys`` directly
+    and calls :meth:`sample_batch` instead of going through a DataLoader.
+
+    ``gears_pert_bank``/``stat_delta_bank`` are NOT stored on this class -
+    they're keyed by ``gene``/``(gene, cell_line)`` only, constant within
+    a batch, so the caller looks them up once per condition rather than
+    broadcasting them into every row here.
     """
 
     def __init__(
         self,
-        ntc_latents: Tensor,
-        ntc_expression: Tensor,
+        ntc_latents: Dict[str, Tensor],
+        ntc_expr: Dict[str, Tensor],
+        pert_latents: Tensor,
+        pert_expr: Tensor,
+        obs_df: pd.DataFrame,
         gears_pert_bank: Dict[str, Tensor],
-        stat_delta_bank: Dict[Tuple[str, int], Tensor],
-        pert_cells: Dict[Tuple[str, int], Tensor],
-        pert_latents: Dict[Tuple[str, int], Tensor],
+        stat_delta_bank: Dict[Tuple[str, str], Tensor],
     ) -> None:
         self.ntc_latents = ntc_latents
-        self.ntc_expression = ntc_expression
+        self.ntc_expr = ntc_expr
+        self.pert_latents = pert_latents
+        self.pert_expr = pert_expr
+
+        groups = obs_df.groupby(["gene", "cell_line"]).indices
+        # Keep only conditions with a GEARS vector, a statistical baseline,
+        # and an NTC pool for their cell line - never silently drop a row's
+        # dependency and substitute something else, just exclude the
+        # condition up front with a visible count.
+        self.condition_keys: List[Tuple[str, str]] = [
+            (gene, cell_line) for (gene, cell_line) in groups.keys()
+            if gene in gears_pert_bank
+            and (gene, cell_line) in stat_delta_bank
+            and cell_line in ntc_latents and cell_line in ntc_expr
+        ]
+        n_dropped = len(groups) - len(self.condition_keys)
+        if n_dropped:
+            print(f"PerturbSeqDataset: dropped {n_dropped}/{len(groups)} conditions "
+                  f"missing a GEARS vector, statistical baseline, or NTC pool.")
+        if not self.condition_keys:
+            raise ValueError("No usable (gene, cell_line) conditions after filtering.")
+
+        self.groups = {k: groups[k] for k in self.condition_keys}
         self.gears_pert_bank = gears_pert_bank
         self.stat_delta_bank = stat_delta_bank
-        self.pert_cells = pert_cells
-        self.pert_latents = pert_latents
-
-        self.index: List[Tuple[str, int, int]] = []  # (gene_id, cell_line_idx, row_in_pert_cells)
-        for (gene_id, cell_line_idx), cells in pert_cells.items():
-            if gene_id not in gears_pert_bank:
-                continue  # no GEARS vector for this gene - cannot build e_p_stack, skip
-            if (gene_id, cell_line_idx) not in stat_delta_bank:
-                continue  # no statistical baseline for this (gene, line) - skip
-            for row in range(cells.shape[0]):
-                self.index.append((gene_id, cell_line_idx, row))
-
-        if not self.index:
-            raise ValueError(
-                "No usable (gene, cell_line, cell) triples: every entry in pert_cells "
-                "was missing either a gears_pert_bank or stat_delta_bank match."
-            )
 
     def __len__(self) -> int:
-        return len(self.index)
+        return len(self.condition_keys)
 
-    def _sample_ntc(self) -> Tuple[Tensor, Tensor]:
-        i = random.randrange(self.ntc_latents.shape[0])
-        return self.ntc_latents[i], self.ntc_expression[i]
+    def sample_batch(self, gene: str, cell_line: str, batch_size: int = 256) -> Dict[str, Tensor]:
+        # 1. True perturbed cells for this condition.
+        pert_indices = self.groups[(gene, cell_line)]
+        chosen_pert = torch.randint(0, len(pert_indices), (batch_size,))
+        idx_p = pert_indices[chosen_pert.numpy()]
 
-    def __getitem__(self, idx: int) -> Dict[str, Tensor]:
-        gene_id, cell_line_idx, row = self.index[idx]
-        e_p_stack = self.gears_pert_bank[gene_id]                       # [4, 64]
-        delta_stat = self.stat_delta_bank[(gene_id, cell_line_idx)]      # [num_genes]
-        y_true = self.pert_cells[(gene_id, cell_line_idx)][row]         # [num_genes]
-        z_true = self.pert_latents[(gene_id, cell_line_idx)][row]       # [d_latent]
-        z_0, x_ctrl = self._sample_ntc()                                # [d_latent], [num_genes]
+        y_true = self.pert_expr[idx_p]
+        z_true = self.pert_latents[idx_p]
+
+        # 2. Unpaired NTC control cells, strictly from the SAME cell line.
+        ctrl_pool_size = self.ntc_latents[cell_line].shape[0]
+        chosen_ctrl = torch.randint(0, ctrl_pool_size, (batch_size,))
+
+        z_0 = self.ntc_latents[cell_line][chosen_ctrl]
+        x_ctrl = self.ntc_expr[cell_line][chosen_ctrl]
+
+        # 3. Condition-level inputs (constant across the batch): broadcast
+        # the single GEARS vector / statistical delta for this condition.
+        e_p_stack = self.gears_pert_bank[gene].unsqueeze(0).expand(batch_size, -1, -1)  # [B,4,64]
+        delta_stat = self.stat_delta_bank[(gene, cell_line)].unsqueeze(0).expand(batch_size, -1)  # [B,G]
 
         return {
-            "e_p_stack": e_p_stack,
-            "cell_line_idx": torch.tensor(cell_line_idx, dtype=torch.long),
-            "delta_stat": delta_stat,
-            "z_0": z_0,
-            "x_ctrl": x_ctrl,
-            "y_true": y_true,
-            "z_true": z_true,
+            "z_0": z_0, "x_ctrl": x_ctrl, "z_true": z_true, "y_true": y_true,
+            "e_p_stack": e_p_stack, "delta_stat": delta_stat,
+            "cell_line_idx": torch.full((batch_size,), CELL_LINE_TO_IDX[cell_line], dtype=torch.long),
         }
 
 
-def load_dataset_from_disk(data_dir: Path) -> PerturbationDataset:
+def load_dataset_from_disk(data_dir: Path) -> PerturbSeqDataset:
     data_dir = Path(data_dir)
-    return PerturbationDataset(
+    with open(data_dir / "obs.pkl", "rb") as f:
+        obs_df = pickle.load(f)
+    return PerturbSeqDataset(
         ntc_latents=torch.load(data_dir / "ntc_latents.pt"),
-        ntc_expression=torch.load(data_dir / "ntc_expression.pt"),
+        ntc_expr=torch.load(data_dir / "ntc_expression.pt"),
+        pert_latents=torch.load(data_dir / "pert_latents.pt"),
+        pert_expr=torch.load(data_dir / "pert_expression.pt"),
+        obs_df=obs_df,
         gears_pert_bank=torch.load(data_dir / "gears_pert_bank.pt"),
         stat_delta_bank=torch.load(data_dir / "stat_delta_bank.pt"),
-        pert_cells=torch.load(data_dir / "pert_cells.pt"),
-        pert_latents=torch.load(data_dir / "pert_latents.pt"),
     )
 
 
@@ -150,7 +174,7 @@ def compute_loss(
     return {"loss": loss, "loss_recon": loss_recon, "loss_swd": loss_swd}
 
 
-def train(config: TrainConfig, dataset: PerturbationDataset) -> VirtualCellModel:
+def train(config: TrainConfig, dataset: PerturbSeqDataset) -> VirtualCellModel:
     torch.manual_seed(config.seed)
     random.seed(config.seed)
 
@@ -163,9 +187,9 @@ def train(config: TrainConfig, dataset: PerturbationDataset) -> VirtualCellModel
     params = list(model.parameters()) + list(context_embedding.parameters())
     optimizer = torch.optim.AdamW(params, lr=config.lr, weight_decay=config.weight_decay)
 
-    loader = DataLoader(dataset, batch_size=config.batch_size, shuffle=True, drop_last=True)
+    conditions = list(dataset.condition_keys)  # one "batch" per condition per epoch
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-        optimizer, T_max=config.max_epochs * max(1, len(loader))
+        optimizer, T_max=config.max_epochs * max(1, len(conditions))
     )
 
     use_amp = config.use_amp and device.type == "cuda"
@@ -178,9 +202,11 @@ def train(config: TrainConfig, dataset: PerturbationDataset) -> VirtualCellModel
 
     model.train()
     for epoch in range(config.max_epochs):
+        random.shuffle(conditions)
         epoch_loss = 0.0
         n_batches = 0
-        for batch in loader:
+        for gene, cell_line in conditions:
+            batch = dataset.sample_batch(gene, cell_line, batch_size=config.batch_size)
             e_p_stack = batch["e_p_stack"].to(device)
             cell_line_idx = batch["cell_line_idx"].to(device)
             delta_stat = batch["delta_stat"].to(device)
