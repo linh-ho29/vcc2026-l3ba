@@ -1,0 +1,27 @@
+# Install torch separately from its CPU wheel index, then this file.
+numpy==1.26.4
+pandas==2.2.2
+scipy==1.14.1
+scanpy==1.10.2
+anndata==0.12.1
+h5py==3.14.0
+torch-geometric==2.7.0
+dcor==0.6
+networkx==3.3
+scikit-learn==1.5.1
+tqdm==4.66.5
+psutil==7.0.0
+requests==2.32.4
+numba==0.61.2
+llvmlite==0.44.0
+joblib==1.5.1
+threadpoolctl==3.6.0
+# Clean-install compatibility: observed training environment had 0.5.9.post2
+# alongside sklearn 1.5.1, an inconsistent dependency declaration. UMAP is not
+# used by this GEARS workflow; 0.5.7 resolves with the recorded sklearn version.
+umap-learn==0.5.7
+pynndescent==0.5.13
+seaborn==0.13.2
+statsmodels==0.14.6
+matplotlib==3.10.5
+xxhash==3.6.0
