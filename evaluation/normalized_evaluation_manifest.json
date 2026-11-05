@@ -1,0 +1,17 @@
+{
+  "dataset": "replogle_rpe1_essential",
+  "scale": "natural log1p normalized expression; frozen GEARS release",
+  "final_evaluation": true,
+  "test_used_for_model_selection": false,
+  "raw_counts": false,
+  "challenge_leaderboard_result": false,
+  "reference_control_cells": 2297,
+  "reference_control_role": "reference_control",
+  "control_inputs_role": "fit_control",
+  "baseline_training_role": "fit",
+  "aggregation": "Macro over perturbation targets; cell-weighted values separately labeled.",
+  "direction_diagnostic": "Top 20 absolute Welch-t scores on model-normalized references; own target excluded; not official Wilcoxon metric.",
+  "near_zero_direction_tolerance": 1e-08,
+  "undefined_correlations": "Unavailable, excluded with explicit valid-target denominators.",
+  "inherited_preprocessing_caveat": "Frozen upstream HVG/strong-perturbation selection may use the original full study. No new reserved responses enter fitting."
+}
