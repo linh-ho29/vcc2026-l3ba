@@ -1,0 +1,28 @@
+dataset: replogle_rpe1_essential
+gears_commit: f374e43e197b295016d80395d7a54ddb81cc6769
+hidden_size: 32
+train_batch_size: 8
+eval_batch_size: 16
+epochs: 8
+seed: 42
+split: simulation
+train_gene_set_size: 0.75
+seen_target_cell_holdout_fraction: 0.20
+reference_control_holdout_fraction: 0.20
+device: cpu
+threads: 4
+optimizer: Adam
+learning_rate: 0.001
+weight_decay: 0.0005
+scheduler: StepLR
+scheduler_step_size: 1
+scheduler_gamma: 0.5
+direction_lambda: 0.1
+gradient_clip_value: 1.0
+training_cell_cap: null
+runtime_target_hours: 12
+model_selection: validation_macro_top20_de_mse
+checkpoint_epochs: [1, 2, 3, 4, 5, 6, 7, 8]
+detailed_evaluation_epochs: [2, 4, 6, 8]
+adapter_training: false
+paid_compute: false
