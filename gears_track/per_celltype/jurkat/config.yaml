@@ -1,0 +1,55 @@
+# Track J configuration: Jurkat GEARS, biology-informed response-blind sampling
+seed: 42
+
+dataset:
+  name: nadig25jurkat
+  source: scPerturb Zenodo record 13350497 (NadigOConner2024_jurkat.h5ad)
+  source_md5: d8b05d00bfbd686d37ffdd4293bc6c8c
+  preferred_source_note: scperteval GCS bucket is requester-pays; scPerturb copy used
+  normalization: normalize_total(1e4) + log1p   # source X is raw integer counts
+  full_shape: [262956, 8882]
+
+sampling:
+  strategy: biology-informed, response-blind
+  effect_blindness: no perturbation-effect magnitude, DE, or fold-change feature
+    used at any sampling step
+  eligibility:
+    min_cells: 10
+    in_measured_panel: true
+    in_gears_go_universe: true   # gene2go_all ∩ essential_all_data_pert_genes
+  n_train_targets: 300
+  n_val_targets: 40
+  n_test_targets: 60
+  cells_per_perturbation: 50
+  n_control_cells: 2000
+  strata: go_category x go_degree_tercile
+  allocation: largest-remainder proportional; test drawn first, then val, then train
+  go_overlap_handling: terms covering >=50 eligible targets are anchors; each gene
+    assigned to its rarest anchor (most specific); multi-membership recorded in
+    sampling_manifest.json
+
+split:
+  leakage_safety: test targets fixed first, then val, then train; target-disjoint
+  manifest: split_manifest.json
+  gears_format: splits/custom_trackJ.pkl (GEARS custom split; ctrl in train only)
+
+model:
+  architecture: GEARS (snap-stanford/GEARS)
+  hidden_size: 32
+  seed: 42
+
+training:
+  batch_size: 8
+  eval_batch_size: 16
+  epochs: 8
+  optimizer: Adam
+  lr: 0.001
+  weight_decay: 0.0005
+  scheduler: StepLR(step_size=1, gamma=0.5)
+  grad_clip_value: 1.0
+  direction_lambda: 0.001
+  checkpointing: per-epoch (checkpoints/epochN_checkpoint.pt) + best by val mse_de
+
+paths:
+  data_dir: /workspace/jurkat/gears_data
+  results_dir: /mnt/results/jurkat_gears

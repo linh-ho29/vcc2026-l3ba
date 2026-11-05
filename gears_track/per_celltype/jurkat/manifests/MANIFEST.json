@@ -1,0 +1,27 @@
+{
+  "adapter": "JurkatGearsAdapter (predict.py)",
+  "interface": "predict_perturbation(perturbation_id, control_cells) -> dict",
+  "returns": [
+    "effect_vector",
+    "predicted_expression",
+    "perturbation_embedding",
+    "gene_embeddings_optional",
+    "gene_vocabulary",
+    "effect_scale_l2",
+    "graph_coverage",
+    "metadata"
+  ],
+  "effect_definition": "predicted_expression - control_mean, CP10k+log1p space (same as training)",
+  "graph_coverage_note": "False for targets absent from the GEARS perturbation graph; no transfer without adaptation",
+  "cross_cell_line_note": "predictions are Jurkat-specific; do not transfer to another cell line without context adaptation",
+  "model_metadata": {
+    "checkpoint": "/mnt/results/jurkat_gears/best_checkpoint.pt",
+    "checkpoint_epoch": 2,
+    "hidden_size": 32,
+    "seed": 42,
+    "cell_line": "Jurkat",
+    "normalization": "CP10k + log1p",
+    "n_genes": 8882,
+    "n_pert_graph_nodes": 9853
+  }
+}

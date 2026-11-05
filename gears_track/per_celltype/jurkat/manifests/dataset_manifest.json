@@ -1,0 +1,22 @@
+{
+  "source_h5ad": "/workspace/jurkat/NadigOConner2024_jurkat.h5ad",
+  "source_md5": "d8b05d00bfbd686d37ffdd4293bc6c8c",
+  "preferred_source_status": "scperteval GCS bucket is requester-pays; used the scPerturb Zenodo distribution of the same Nadig et al. Jurkat screen (record 13350497)",
+  "shape_full": [
+    262956,
+    8882
+  ],
+  "normalization": "normalize_total(1e4) + log1p (source X was raw integer counts)",
+  "verified": {
+    "raw_counts": true,
+    "gene_identifiers": "ensembl_id + var_names",
+    "single_gene_labels": "obs.perturbation",
+    "controls": "obs.perturbation=='control'",
+    "go_mappings": "GEARS gene2go_all.pkl + go_essential_all graph",
+    "target_coverage": "2115 targets with >= 10 cells",
+    "sample_batch_metadata": "obs.batch (55 batches)"
+  },
+  "gears_dataset_dir": "/workspace/jurkat/gears_data/nadig25jurkat",
+  "de_calc_time_s": 111.7,
+  "prep_time_s": 213.8
+}

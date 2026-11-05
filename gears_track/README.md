@@ -3,10 +3,11 @@
 Reorganized to match the Phase 1 ("offline precomputation") box of the
 multi-context fusion architecture: per-cell-type pretrained GEARS models,
 each producing extracted perturbation vectors `e_p^(k)` for cell type `k`.
-Phase 1's other half (control-cell VAE/PCA -> NTC latents `z_0`) and all of
-Phase 2 (gated fusion, input conditioning, latent flow block, decoder,
-losses) are **not yet present** - awaiting the adapter code and additional
-trained cell types the user will point to separately.
+Phase 1's other half (control-cell VAE/PCA -> NTC latents `z_0`) and the
+rest of Phase 2 now live on the `gated-fusion-work` branch (the
+`hybrid_adapter` package), not here - this track is purely the per-cell-type
+GEARS models and the tooling to extract/merge their embeddings. RPE1
+(Courtney's track) has no checkpoint or extracted embeddings here yet.
 
 ## Layout
 
@@ -14,7 +15,10 @@ trained cell types the user will point to separately.
 gears_track/
 ├── per_celltype/
 │   ├── k562/        # complete - see per_celltype/k562/README.md
-│   └── hepg2/        # partial - see per_celltype/hepg2/README.md and the gap noted below
+│   ├── hepg2/        # partial - see per_celltype/hepg2/README.md and the gap noted below
+│   └── jurkat/       # complete - see per_celltype/jurkat/README.md
+├── merged/
+│   └── gears_embeddings_merged.h5   # output of shared/scripts/extract_gears_embeddings.py
 └── shared/
     ├── gears_patched_source/   # vendored, patched upstream `gears` library (v0.0.2) - used by any cell type
     └── scripts/                 # data-prep, graph-cache builders, training/inference, metrics/reporting
@@ -64,3 +68,42 @@ here**, confirmed directly rather than assumed:
 
 See `per_celltype/hepg2/README.md` for the full original design
 documentation (data source, split, training config, reproduction steps).
+
+## jurkat (`per_celltype/jurkat/`)
+
+Complete, no corruption (checked directly - every file's size and shape
+matches its own README/MANIFEST). The most rigorously evaluated of the
+three real cell-type models here - worth reading
+`per_celltype/jurkat/README.md` in full before using it for anything beyond
+embedding extraction: under response-blind, biology-diverse target
+sampling, **GEARS underperforms a naive mean-shift baseline**
+(pearson_delta 0.073 vs. 0.239) on the held-out split, and a dedicated
+ablation (stretched LR schedule, 4x wider hidden layer, 2x more epochs)
+shows this is **structural, not under-training** - every metric is
+unchanged across arms. Consistent with similar weak-GEARS-vs-baseline
+findings elsewhere in this project (see `multisource_experiments/` on the
+`linhho` branch) - a third, independently-arrived-at data point for the
+same pattern, not a one-off.
+
+Not copied here: `heldout_effect_predictions.npz` (190 MB, exceeds
+GitHub's limit) and the checkpoint-only `checkpoints/epoch{1..8}` sweep
+(only `best_checkpoint.pt`, epoch 2, and `epoch8_checkpoint.pt` are kept,
+matching the hepg2/k562 convention) - available locally in
+`~/Downloads/jurkat_gears/` if needed.
+
+## `merged/gears_embeddings_merged.h5`
+
+Output of `shared/scripts/extract_gears_embeddings.py`: standardizes each
+cell type's post-GNN perturbation embedding to a fixed `d_pert=64` (identity
+for k562, already 64-d; a fixed/seeded - not learned - Gaussian random
+projection for hepg2 and jurkat, both 32-d) and merges into one
+`[n_genes, 4, 64]` tensor in the fixed order `[K562, HepG2, RPE1, Jurkat]`,
+with a `[n_genes, 4]` binary mask (1 = real, 0 = imputed). Missing
+cell-line/gene combinations are imputed with the cross-line mean of
+whichever lines ARE available for that gene - never zero-filled, per this
+project's established convention. RPE1 has mask=0 for every single gene
+(no RPE1 model exists anywhere in this project yet); 11,632 genes have at
+least one real source, mean coverage 0.496 across all (gene, cell-line)
+pairs. "post-GNN" is defined precisely in the script's own docstring, not
+assumed - it's the output of GEARS's `pert_fuse(sim_layers(pert_emb(...)))`,
+matching what each handoff already saved as `*_fused`/`post_graph` arrays.
