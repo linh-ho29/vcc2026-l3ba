@@ -60,39 +60,4 @@ head projects to `R^G` (G genes) as predicted expression `y_hat_pert`.
 - Sliced Wasserstein: `SWD({z_pert}, {z_true})` - preserves cell-to-cell
   heterogeneity that a pure MSE loss on mean profiles would wash out.
 
-### Status
 
-Phase 1's per-cell-type GEARS models (k562, hepg2) exist on the `GEARS`
-branch; rpe1 (Courtney) is tracked on its own branch and not yet merged in
-here.
-
-Everything else in this diagram - the gated multi-context fusion, the
-control-cell branch (frozen scGPT pooling + PCA, since no VAE was needed:
-sampling real encoded control cells empirically makes a generative prior
-unnecessary), the discrete latent flow block, the decoder, and the Sliced
-Wasserstein loss - is implemented on top of Aretha's adapter package
-(`src/hybrid_adapter`), as a second model (`GatedFusionFlowAdapter`)
-alongside the original `HybridAdapter` (`corrected = stat + residual`,
-untouched). Verified end to end against real data - 2,000 real HepG2
-control cells, the real fine-tuned scGPT embeddings (frozen, used as an
-offline feature extractor per direction - though this project's own
-evaluation found the fine-tune didn't measurably beat frozen embeddings
-under its probe, worth knowing before expecting much from that choice
-alone), and real k562+hepg2 GEARS embeddings for 2,122 overlapping genes -
-but only as a forward-pass compatibility check (no training, no gradients
-against real data, per the package's synthetic-phase scope). This work is
-on the `gated-fusion-work` branch (forked from `Aretha_phylo`, now pushed -
-not yet merged into `Aretha_phylo` or here) - the new modules live together
-under `src/hybrid_adapter/gated_fusion_flow/`, separate from the original
-Module A-D files, which that branch leaves untouched.
-
-
-
-Contributions: 
-1. Linh: project manager, data context and engineering as well as advanced inference engineering and contribute to form a scientifically sound hypothesis
-2. Aretha: train GEARS with K562 data, form scientifically sound hypothesis and build a fusion adapter to fit with the hypothesis. 
-3. Courtney: train GEARS with RPE1 data
-4. Lawrence: train GEARS with HepG2 with broad pertubation sampling
-5. Buu: form scientifically sound hypothesis regarding gene ontology graph and Markov chains
-6. Lerie: pinpoint LLM platforms that can be helpful for this project
-7. Sang: for training team members on basic concepts of bioinformatics and strategizing data engineering
