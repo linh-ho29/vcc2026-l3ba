@@ -1,0 +1,14 @@
+{
+  "attempt_id": "allowance_reset_20261103",
+  "active_training_pids": [
+    176
+  ],
+  "last_record_time": "2026-11-03T00:50:43Z",
+  "epoch": 7,
+  "batch": 5514,
+  "batches_per_epoch": 11306,
+  "global_step": 73350,
+  "observed_batch_seconds": 0.5430116653442383,
+  "estimated_remaining_training_validation_minutes": 158.70947736501694,
+  "timing_caveat": "Early resumed-worker throughput; excludes post-training exports and evaluation."
+}

@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "comparison": "ordinary official compute_metrics versus per-target official DE precomputation",
+  "tolerance_absolute": 1e-10,
+  "tolerance_relative": 1e-10,
+  "predicted_sha256": "7e12414edc7c8a8f1dc2ce1d93b7e861a6a2ad0bf0e468ca451ff5474d17cfa0",
+  "real_sha256": "713857b444fdf758d59d0589c15046a778454fab9c806b3f4ddc3074d28a160b"
+}

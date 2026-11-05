@@ -1,0 +1,52 @@
+{
+  "shape": [
+    247914,
+    8749
+  ],
+  "encoding": "dense dataset",
+  "obs_columns": [
+    "gem_group",
+    "gene",
+    "gene_id",
+    "transcript",
+    "gene_transcript",
+    "sgID_AB",
+    "mitopercent",
+    "UMI_count",
+    "z_gemgroup_UMI",
+    "core_scale_factor",
+    "core_adjusted_UMI_count"
+  ],
+  "var_columns": [
+    "gene_name",
+    "chr",
+    "start",
+    "end",
+    "class",
+    "strand",
+    "length",
+    "in_matrix",
+    "mean",
+    "std",
+    "cv",
+    "fano"
+  ],
+  "unique_cell_ids": true,
+  "unique_gene_ids": true,
+  "sample_count_min": 0.0,
+  "sample_count_max": 133.0,
+  "sample_counts_nonnegative_integral": true,
+  "raw_cell_index_name": "cell_barcode",
+  "raw_gene_index_name": "gene_id",
+  "gears_cell_manifest_columns": [
+    "cell_id",
+    "row_index",
+    "condition",
+    "role"
+  ],
+  "gears_gene_index_columns": [
+    "gene_index",
+    "gene_id",
+    "gene_symbol"
+  ]
+}

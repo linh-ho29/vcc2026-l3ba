@@ -1,0 +1,13 @@
+{
+  "attempt_id": "allowance_reset_20261103",
+  "started_at": "2026-11-03T00:49:29Z",
+  "pid": 176,
+  "resumed_from": "/mnt/shared-workspace/shared/gears_recovery_before_reset_resume_20261103/recovery.pt",
+  "completed_epochs": 6,
+  "current_epoch": 7,
+  "completed_batches": 5371,
+  "global_step": 73207,
+  "checkpoint_seconds": 120,
+  "threads": 4,
+  "batch_size": 8
+}

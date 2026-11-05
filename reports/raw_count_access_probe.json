@@ -1,0 +1,10 @@
+{
+  "url": "https://ndownloader.figshare.com/files/35775606",
+  "status_code": 206,
+  "content_range": "bytes 0-16777215/8700873216",
+  "content_type": "application/octet-stream",
+  "bytes_received": 16777216,
+  "seconds": 2.8370682540007692,
+  "hdf5_signature": true,
+  "mebibytes_per_second": 5.639624629205576
+}

@@ -1,0 +1,15 @@
+{
+  "epochs": [
+    2,
+    4,
+    6,
+    8
+  ],
+  "selected_by_validation_epoch": 3,
+  "controls_per_target": 64,
+  "control_selection_seed_label": "export_control_panel",
+  "inference_batch_size": 16,
+  "baseline": "equal-weight fitting-target mean effect",
+  "count_layer_policy": "separate optional module, no test tuning",
+  "heldout_targets_unchanged": true
+}

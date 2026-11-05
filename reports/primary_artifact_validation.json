@@ -1,0 +1,291 @@
+{
+  "verified_at": "2026-11-03T06:35:42Z",
+  "status": "primary_artifacts_valid",
+  "completed_epochs": 8,
+  "global_step": 90448,
+  "best_validation_epoch": 3,
+  "checkpoint_records": [
+    {
+      "epoch": 1,
+      "filename": "/mnt/results/gears_adapter_ready/checkpoints/epoch_01.pt",
+      "sha256": "b45b2895cce866b0e5de3de326b2eacdf8a464f08029c4da76a574852117a3d3",
+      "bytes": 19257630
+    },
+    {
+      "epoch": 2,
+      "filename": "/mnt/results/gears_adapter_ready/checkpoints/epoch_02.pt",
+      "sha256": "e6bc674239d6431559ae845a05c117916bc29605ef4072052c0ab0ac4b61cd8c",
+      "bytes": 19258014
+    },
+    {
+      "epoch": 3,
+      "filename": "/mnt/results/gears_adapter_ready/checkpoints/epoch_03.pt",
+      "sha256": "a6cb1fa9b94ba91a5e4dabd1ae343b622a44aa002dc830608bb1ae8829c14c8e",
+      "bytes": 19258142
+    },
+    {
+      "epoch": 4,
+      "filename": "/mnt/results/gears_adapter_ready/checkpoints/epoch_04.pt",
+      "sha256": "57194ec4c70ca649e2e79c936fec95cf0d13f706d1f6412cd93f5e0e343275c6",
+      "bytes": 19258334
+    },
+    {
+      "epoch": 5,
+      "filename": "/mnt/results/gears_adapter_ready/checkpoints/epoch_05.pt",
+      "sha256": "6c1ca602dd51b08e4dd4fe494f4990ed9a19b900b0bef51b6d631125d8e68201",
+      "bytes": 19258718
+    },
+    {
+      "epoch": 6,
+      "filename": "/mnt/results/gears_adapter_ready/checkpoints/epoch_06.pt",
+      "sha256": "9c1e0b7fe4e05f98bef5d7376827c9d4f5ee8f6e40adb8ffd1a6fb392145ad4e",
+      "bytes": 19258910
+    },
+    {
+      "epoch": 7,
+      "filename": "/mnt/results/gears_adapter_ready/training_resume_20261103/checkpoints/epoch_07.pt",
+      "sha256": "143571959d6966d162f3658861077b3c39cb08fd9daa5c2e72c85e37bec11afa",
+      "bytes": 19259294
+    },
+    {
+      "epoch": 8,
+      "filename": "/mnt/results/gears_adapter_ready/training_resume_20261103/checkpoints/epoch_08.pt",
+      "sha256": "7b1732208884c76ddf7c32c02e7ed00e298c61bb21150edd07adb306d0cc97ec",
+      "bytes": 19259678
+    }
+  ],
+  "immutable_identity": {
+    "source_sha256": "cc3e13da13ecd3cf7fb027b8261514a2bdcfab16fe47fc685b2714f79781afba",
+    "split_sha256": "44b5de1a5edcf2e1438890e965e145bb2eb7a74b53ac3e389d58a7f96e1abc9c",
+    "cell_manifest_sha256": "6696df8af29b8a2008b5955046dc1ca32975a8e1c5d84d3f262573643b67cbe1",
+    "fit_row_sha256": "2f547466bfde890d74b64503aa93a76045b9dc68ae322c159a1cd9b8503aa198",
+    "gene_order_sha256": "418e0d9beeb0d2ab185c1b72b98cdad6366dae32f8a83eb4de92d63a8cb6f501",
+    "target_order_sha256": "b29851a15eadeccd451991e73c448bef5f9f1b8a9579ec37b3c2fd0eb62d3620",
+    "graph_sha256": "1ff295f3bce1c2dead24e0b979c0347849f6efafa02fa748338a6c978be11fd4"
+  },
+  "predictions": [
+    {
+      "epoch": 2,
+      "shape": [
+        1419,
+        5000
+      ],
+      "sha256": "f16ab3a3ab33ee2fdd5597272a345a7f4cf840e3630658ef57e349010a20e2ba",
+      "seconds": 1751.3254029750824
+    },
+    {
+      "epoch": 4,
+      "shape": [
+        1419,
+        5000
+      ],
+      "sha256": "b0e527e331f9a83bc8ca6eae81d243a0fce4cda5520a8d6c722c1d79903da468",
+      "seconds": 2184.610652446747
+    },
+    {
+      "epoch": 6,
+      "shape": [
+        1419,
+        5000
+      ],
+      "sha256": "504baf678eedc2d568837021d02e222adfa0e5a9ab1a8e298c399cb5ac7eca49",
+      "seconds": 2744.912802219391
+    },
+    {
+      "epoch": 8,
+      "shape": [
+        1419,
+        5000
+      ],
+      "sha256": "378169770a858358c1716b9a45fefc882fbd16e46d331aa79ead63161bb96c99",
+      "seconds": 2030.0497465133667
+    }
+  ],
+  "embedding_records": [
+    {
+      "checkpoint_epoch": 8,
+      "representation": "gene_lookup",
+      "rows": 5000,
+      "columns": 32,
+      "effective_rank": 1.0,
+      "zero_norm_rows": 0
+    },
+    {
+      "checkpoint_epoch": 8,
+      "representation": "gene_position_pre",
+      "rows": 5000,
+      "columns": 32,
+      "effective_rank": 2.0361621448711413,
+      "zero_norm_rows": 0
+    },
+    {
+      "checkpoint_epoch": 8,
+      "representation": "gene_position_post_slot0",
+      "rows": 5000,
+      "columns": 32,
+      "effective_rank": 1.0000642326984928,
+      "zero_norm_rows": 0
+    },
+    {
+      "checkpoint_epoch": 8,
+      "representation": "gene_position_post_other_slots",
+      "rows": 5000,
+      "columns": 32,
+      "effective_rank": 1.0001058547846358,
+      "zero_norm_rows": 0
+    },
+    {
+      "checkpoint_epoch": 8,
+      "representation": "gene_combined_slot0",
+      "rows": 5000,
+      "columns": 32,
+      "effective_rank": 1.0,
+      "zero_norm_rows": 0
+    },
+    {
+      "checkpoint_epoch": 8,
+      "representation": "gene_combined_other_slots",
+      "rows": 5000,
+      "columns": 32,
+      "effective_rank": 1.0,
+      "zero_norm_rows": 0
+    },
+    {
+      "checkpoint_epoch": 8,
+      "representation": "target_pre_go",
+      "rows": 9853,
+      "columns": 32,
+      "effective_rank": 1.4747167837588553,
+      "zero_norm_rows": 4451
+    },
+    {
+      "checkpoint_epoch": 8,
+      "representation": "target_post_go",
+      "rows": 9853,
+      "columns": 32,
+      "effective_rank": 1.0697029069107298,
+      "zero_norm_rows": 0
+    },
+    {
+      "checkpoint_epoch": 8,
+      "representation": "target_fused",
+      "rows": 9853,
+      "columns": 32,
+      "effective_rank": 1.0,
+      "zero_norm_rows": 0
+    },
+    {
+      "checkpoint_epoch": 3,
+      "representation": "gene_lookup",
+      "rows": 5000,
+      "columns": 32,
+      "effective_rank": 1.0,
+      "zero_norm_rows": 0
+    },
+    {
+      "checkpoint_epoch": 3,
+      "representation": "gene_position_pre",
+      "rows": 5000,
+      "columns": 32,
+      "effective_rank": 4.819979161344212,
+      "zero_norm_rows": 0
+    },
+    {
+      "checkpoint_epoch": 3,
+      "representation": "gene_position_post_slot0",
+      "rows": 5000,
+      "columns": 32,
+      "effective_rank": 1.0079692012816053,
+      "zero_norm_rows": 0
+    },
+    {
+      "checkpoint_epoch": 3,
+      "representation": "gene_position_post_other_slots",
+      "rows": 5000,
+      "columns": 32,
+      "effective_rank": 1.0107793520269661,
+      "zero_norm_rows": 0
+    },
+    {
+      "checkpoint_epoch": 3,
+      "representation": "gene_combined_slot0",
+      "rows": 5000,
+      "columns": 32,
+      "effective_rank": 1.0,
+      "zero_norm_rows": 0
+    },
+    {
+      "checkpoint_epoch": 3,
+      "representation": "gene_combined_other_slots",
+      "rows": 5000,
+      "columns": 32,
+      "effective_rank": 1.0,
+      "zero_norm_rows": 0
+    },
+    {
+      "checkpoint_epoch": 3,
+      "representation": "target_pre_go",
+      "rows": 9853,
+      "columns": 32,
+      "effective_rank": 5.718440074424324,
+      "zero_norm_rows": 4451
+    },
+    {
+      "checkpoint_epoch": 3,
+      "representation": "target_post_go",
+      "rows": 9853,
+      "columns": 32,
+      "effective_rank": 1.7645052053592258,
+      "zero_norm_rows": 0
+    },
+    {
+      "checkpoint_epoch": 3,
+      "representation": "target_fused",
+      "rows": 9853,
+      "columns": 32,
+      "effective_rank": 1.0000000000007438,
+      "zero_norm_rows": 0
+    }
+  ],
+  "adapter_bundle_valid": true,
+  "adapter_trained": false,
+  "trained_interface_smoke": {
+    "checkpoint_epoch": 8,
+    "unseen_target": "RRP12+ctrl",
+    "prediction_shape": [
+      1,
+      16,
+      5000
+    ],
+    "repeated_fixed_batch_predictions_equal_within_1e_minus6": true,
+    "unsupported_target_rejected": true,
+    "adapter_bundle_valid": true,
+    "upstream_batch_slot_max_abs_effect_difference": 7.390975952148438e-05,
+    "measured_test_outcomes_used": false,
+    "external_alignment_schema_test": true,
+    "controls_used": [
+      "AAACCCAAGAGAGAAC-35",
+      "AAACCCAAGCGGACAT-34",
+      "AAACCCAGTAGGTTTC-5",
+      "AAACCCAGTTCAAGGG-31",
+      "AAACCCATCCCAGTGG-4",
+      "AAACCCATCGACATCA-18",
+      "AAACCCATCGGTGTAT-26",
+      "AAACCCATCGTTCTAT-53",
+      "AAACGAAAGTATCTGC-40",
+      "AAACGAAAGTTCCTGA-12",
+      "AAACGAACAAACGAGC-56",
+      "AAACGAACACATGTTG-4",
+      "AAACGAACACTTGTGA-4",
+      "AAACGAACATACCACA-14",
+      "AAACGAACATATCTCT-23",
+      "AAACGAAGTACCTAAC-51"
+    ]
+  },
+  "normalized_metric_rows": 12,
+  "per_target_metric_rows": 8514,
+  "training_elapsed_seconds_committed": 27572.999690055847,
+  "peak_training_rss_gib": 3.8115768432617188,
+  "official_count_metrics_complete": false,
+  "github_uploaded": false
+}

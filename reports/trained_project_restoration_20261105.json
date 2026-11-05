@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "archives": [
+    {
+      "filename": "gears_rpe1_8epoch_primary_v2.tar.gz",
+      "sha256": "6034f052738296afbff3d255d9a069993f1ddf3a7bbb5fbe52c06522b67f0480",
+      "bytes": 542687724,
+      "verified_members": 132
+    },
+    {
+      "filename": "gears_rpe1_primary_v2_reproducibility_patch_v3.tar.gz",
+      "sha256": "45734a83738817bbfdfe72021f45bfc942b24fe860b07371020f0bfd05d52481",
+      "bytes": 646003,
+      "verified_members": 90
+    },
+    {
+      "filename": "gears_recovery_source_1793809066847364595.tar.gz",
+      "sha256": "8d764911a276d6811bea47c7cf626d2d40adc623073288aba36d28e22173f464",
+      "bytes": 15058985,
+      "verified_members": 153
+    }
+  ],
+  "restored_checkpoints": 8,
+  "no_training": true,
+  "no_model_inference": true,
+  "seconds": 12.968027975000041
+}

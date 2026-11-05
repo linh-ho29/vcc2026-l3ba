@@ -1,0 +1,13 @@
+{
+  "attempt_id": "writable_resume_20261103_chunk2",
+  "started_at": "2026-11-03T02:35:22Z",
+  "pid": 45571,
+  "resumed_from": "/workspace/gears_run/checkpoints/recovery.pt",
+  "completed_epochs": 7,
+  "current_epoch": 8,
+  "completed_batches": 5473,
+  "global_step": 84615,
+  "checkpoint_seconds": 120,
+  "threads": 4,
+  "batch_size": 8
+}

@@ -1,0 +1,88 @@
+{
+  "verified_at": "2026-11-03T00:54:02Z",
+  "status": "valid_recovery_no_training_updates_performed",
+  "checkpoint": "/workspace/gears_run/checkpoints/recovery.pt",
+  "checkpoint_sha256": "ae1396e84fd191afade01a5408136079bd8d4ab56896622158e1c54a37131a66",
+  "verified_checkpoint_files": [
+    {
+      "filename": "epoch_01.pt",
+      "epoch": 1,
+      "cursor": 0,
+      "global_step": 11306,
+      "bytes": 19257630,
+      "sha256": "b45b2895cce866b0e5de3de326b2eacdf8a464f08029c4da76a574852117a3d3"
+    },
+    {
+      "filename": "epoch_02.pt",
+      "epoch": 2,
+      "cursor": 0,
+      "global_step": 22612,
+      "bytes": 19258014,
+      "sha256": "e6bc674239d6431559ae845a05c117916bc29605ef4072052c0ab0ac4b61cd8c"
+    },
+    {
+      "filename": "epoch_03.pt",
+      "epoch": 3,
+      "cursor": 0,
+      "global_step": 33918,
+      "bytes": 19258142,
+      "sha256": "a6cb1fa9b94ba91a5e4dabd1ae343b622a44aa002dc830608bb1ae8829c14c8e"
+    },
+    {
+      "filename": "epoch_04.pt",
+      "epoch": 4,
+      "cursor": 0,
+      "global_step": 45224,
+      "bytes": 19258334,
+      "sha256": "57194ec4c70ca649e2e79c936fec95cf0d13f706d1f6412cd93f5e0e343275c6"
+    },
+    {
+      "filename": "epoch_05.pt",
+      "epoch": 5,
+      "cursor": 0,
+      "global_step": 56530,
+      "bytes": 19258718,
+      "sha256": "6c1ca602dd51b08e4dd4fe494f4990ed9a19b900b0bef51b6d631125d8e68201"
+    },
+    {
+      "filename": "epoch_06.pt",
+      "epoch": 6,
+      "cursor": 0,
+      "global_step": 67836,
+      "bytes": 19258910,
+      "sha256": "9c1e0b7fe4e05f98bef5d7376827c9d4f5ee8f6e40adb8ffd1a6fb392145ad4e"
+    },
+    {
+      "filename": "recovery.pt",
+      "epoch": 6,
+      "cursor": 5609,
+      "global_step": 73445,
+      "bytes": 20063134,
+      "sha256": "ae1396e84fd191afade01a5408136079bd8d4ab56896622158e1c54a37131a66"
+    }
+  ],
+  "completed_epochs": 6,
+  "current_epoch": 7,
+  "completed_batches_in_current_epoch": 5609,
+  "next_batch_number_1_based": 5610,
+  "batches_per_epoch": 11306,
+  "global_step": 73445,
+  "remaining_training_batches": 17003,
+  "model_weights_finite": true,
+  "optimizer_state_valid": true,
+  "scheduler_valid": true,
+  "python_numpy_torch_rng_restored": true,
+  "data_loader_permutation_and_rng_valid": true,
+  "dataset_gene_target_split_and_graph_identity_valid": true,
+  "restored_matrix_cache_samples_match_source": true,
+  "learning_rate": 1.5625e-05,
+  "training_threads": 4,
+  "source_training_log_latest_step": 75800,
+  "uncheckpointed_logged_steps_requiring_replay": 2355,
+  "interrupted_attempt_uncheckpointed_elapsed_lower_bound_seconds": 429.9630537033081,
+  "recent_median_batch_seconds": 0.5289480686187744,
+  "estimated_remaining_training_and_validation_seconds": 9231.859198570251,
+  "allowance_status": "Worker restored and responsive; no direct credit-balance endpoint available. User reports allowance reset.",
+  "previous_background_status": "Exited during durable recovery publication: existing recovery.pt is write-protected. Newer local recovery and sidecar were saved successfully; no active training job.",
+  "paid_resources_requested": false
+}

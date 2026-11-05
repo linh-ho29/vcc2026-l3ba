@@ -1,0 +1,10 @@
+{
+  "completed_at": "2026-11-03T06:28:29Z",
+  "completed_epochs": 8,
+  "primary_exports": true,
+  "normalized_evaluation": true,
+  "adapter_trained": false,
+  "official_count_evaluation": false,
+  "github_uploaded": false,
+  "paid_compute_requested": false
+}

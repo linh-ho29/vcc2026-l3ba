@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "comparison": "exact counts and axes",
+  "cells": 864,
+  "genes": 5000,
+  "nonzero": 1213993
+}

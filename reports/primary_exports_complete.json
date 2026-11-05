@@ -1,0 +1,13 @@
+{
+  "completed_training_epochs": 8,
+  "embeddings": true,
+  "adapter_bundle": true,
+  "predictions_epochs": [
+    2,
+    4,
+    6,
+    8
+  ],
+  "adapter_trained": false,
+  "github_uploaded": false
+}

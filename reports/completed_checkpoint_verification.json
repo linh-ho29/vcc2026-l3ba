@@ -1,0 +1,54 @@
+{
+  "verified_at": "2026-11-03T03:33:09Z",
+  "completed_epochs": 8,
+  "checkpoints": [
+    {
+      "epoch": 1,
+      "filename": "/mnt/results/gears_adapter_ready/checkpoints/epoch_01.pt",
+      "sha256": "b45b2895cce866b0e5de3de326b2eacdf8a464f08029c4da76a574852117a3d3",
+      "bytes": 19257630
+    },
+    {
+      "epoch": 2,
+      "filename": "/mnt/results/gears_adapter_ready/checkpoints/epoch_02.pt",
+      "sha256": "e6bc674239d6431559ae845a05c117916bc29605ef4072052c0ab0ac4b61cd8c",
+      "bytes": 19258014
+    },
+    {
+      "epoch": 3,
+      "filename": "/mnt/results/gears_adapter_ready/checkpoints/epoch_03.pt",
+      "sha256": "a6cb1fa9b94ba91a5e4dabd1ae343b622a44aa002dc830608bb1ae8829c14c8e",
+      "bytes": 19258142
+    },
+    {
+      "epoch": 4,
+      "filename": "/mnt/results/gears_adapter_ready/checkpoints/epoch_04.pt",
+      "sha256": "57194ec4c70ca649e2e79c936fec95cf0d13f706d1f6412cd93f5e0e343275c6",
+      "bytes": 19258334
+    },
+    {
+      "epoch": 5,
+      "filename": "/mnt/results/gears_adapter_ready/checkpoints/epoch_05.pt",
+      "sha256": "6c1ca602dd51b08e4dd4fe494f4990ed9a19b900b0bef51b6d631125d8e68201",
+      "bytes": 19258718
+    },
+    {
+      "epoch": 6,
+      "filename": "/mnt/results/gears_adapter_ready/checkpoints/epoch_06.pt",
+      "sha256": "9c1e0b7fe4e05f98bef5d7376827c9d4f5ee8f6e40adb8ffd1a6fb392145ad4e",
+      "bytes": 19258910
+    },
+    {
+      "epoch": 7,
+      "filename": "/mnt/results/gears_adapter_ready/training_resume_20261103/checkpoints/epoch_07.pt",
+      "sha256": "143571959d6966d162f3658861077b3c39cb08fd9daa5c2e72c85e37bec11afa",
+      "bytes": 19259294
+    },
+    {
+      "epoch": 8,
+      "filename": "/mnt/results/gears_adapter_ready/training_resume_20261103/checkpoints/epoch_08.pt",
+      "sha256": "7b1732208884c76ddf7c32c02e7ed00e298c61bb21150edd07adb306d0cc97ec",
+      "bytes": 19259678
+    }
+  ]
+}

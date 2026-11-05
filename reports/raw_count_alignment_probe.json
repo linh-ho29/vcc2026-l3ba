@@ -1,0 +1,12 @@
+{
+  "raw_cells": 247914,
+  "raw_genes": 8749,
+  "gears_cells_matched": 162733,
+  "gears_genes_matched": 5000,
+  "exact_gene_id_alignment": true,
+  "exact_cell_id_alignment": true,
+  "exact_target_label_alignment": true,
+  "raw_dense_bytes": 8675998344,
+  "estimated_full_transfer_minutes": 24.522315644422353,
+  "count_integrality_status": "Pilot sample passed; full matched-count validation pending"
+}

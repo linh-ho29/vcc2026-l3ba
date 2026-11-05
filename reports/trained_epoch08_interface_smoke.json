@@ -1,0 +1,33 @@
+{
+  "checkpoint_epoch": 8,
+  "unseen_target": "RRP12+ctrl",
+  "prediction_shape": [
+    1,
+    16,
+    5000
+  ],
+  "repeated_fixed_batch_predictions_equal_within_1e_minus6": true,
+  "unsupported_target_rejected": true,
+  "adapter_bundle_valid": true,
+  "upstream_batch_slot_max_abs_effect_difference": 7.390975952148438e-05,
+  "measured_test_outcomes_used": false,
+  "external_alignment_schema_test": true,
+  "controls_used": [
+    "AAACCCAAGAGAGAAC-35",
+    "AAACCCAAGCGGACAT-34",
+    "AAACCCAGTAGGTTTC-5",
+    "AAACCCAGTTCAAGGG-31",
+    "AAACCCATCCCAGTGG-4",
+    "AAACCCATCGACATCA-18",
+    "AAACCCATCGGTGTAT-26",
+    "AAACCCATCGTTCTAT-53",
+    "AAACGAAAGTATCTGC-40",
+    "AAACGAAAGTTCCTGA-12",
+    "AAACGAACAAACGAGC-56",
+    "AAACGAACACATGTTG-4",
+    "AAACGAACACTTGTGA-4",
+    "AAACGAACATACCACA-14",
+    "AAACGAACATATCTCT-23",
+    "AAACGAAGTACCTAAC-51"
+  ]
+}

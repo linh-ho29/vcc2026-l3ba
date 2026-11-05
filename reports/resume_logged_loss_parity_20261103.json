@@ -1,0 +1,18 @@
+{
+  "status": "exact_logged_loss_replay_at_common_steps",
+  "matched_logged_steps": [
+    {
+      "global_step": 73250,
+      "old_loss": 0.8432496786117554,
+      "resumed_loss": 0.8432496786117554,
+      "exactly_equal": true
+    },
+    {
+      "global_step": 73300,
+      "old_loss": 0.8057430386543274,
+      "resumed_loss": 0.8057430386543274,
+      "exactly_equal": true
+    }
+  ],
+  "all_exact": true
+}
