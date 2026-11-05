@@ -80,10 +80,11 @@ evaluation found the fine-tune didn't measurably beat frozen embeddings
 under its probe, worth knowing before expecting much from that choice
 alone), and real k562+hepg2 GEARS embeddings for 2,122 overlapping genes -
 but only as a forward-pass compatibility check (no training, no gradients
-against real data, per the package's synthetic-phase scope). This work
-currently lives on a local branch forked from `Aretha_phylo`
-(`gated-fusion-work`), not yet pushed - ask Linh/Claude for the current
-state if you need it before it's merged.
+against real data, per the package's synthetic-phase scope). This work is
+on the `gated-fusion-work` branch (forked from `Aretha_phylo`, now pushed -
+not yet merged into `Aretha_phylo` or here) - the new modules live together
+under `src/hybrid_adapter/gated_fusion_flow/`, separate from the original
+Module A-D files, which that branch leaves untouched.
 
 
 
