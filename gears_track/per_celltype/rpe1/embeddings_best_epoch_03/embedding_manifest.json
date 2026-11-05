@@ -1,0 +1,172 @@
+{
+  "checkpoint_epoch": 3,
+  "checkpoint_sha256": "a6cb1fa9b94ba91a5e4dabd1ae343b622a44aa002dc830608bb1ae8829c14c8e",
+  "embedding_dimension": 32,
+  "representations": {
+    "gene_lookup": {
+      "shape": [
+        5000,
+        32
+      ],
+      "norm_min": 1.8365135474596173e-06,
+      "norm_max": 0.04818597063422203,
+      "norm_mean": 0.004032698925584555,
+      "norm_median": 0.003672894323244691,
+      "norm_p05": 0.0006367270834743977,
+      "norm_p95": 0.016578498203307392,
+      "zero_norm_rows": 0,
+      "effective_rank": 1.0,
+      "effective_rank_definition": "exp(Shannon entropy of normalized singular values); uncentered"
+    },
+    "gene_position_pre": {
+      "shape": [
+        5000,
+        32
+      ],
+      "norm_min": 3.028524986348202e-07,
+      "norm_max": 0.003980677109211683,
+      "norm_mean": 2.275516999361571e-05,
+      "norm_median": 9.392450010636821e-06,
+      "norm_p05": 1.536058903184312e-06,
+      "norm_p95": 5.24625793332234e-05,
+      "zero_norm_rows": 0,
+      "effective_rank": 4.819979161344212,
+      "effective_rank_definition": "exp(Shannon entropy of normalized singular values); uncentered"
+    },
+    "gene_position_post_slot0": {
+      "shape": [
+        5000,
+        32
+      ],
+      "norm_min": 0.00013531142030842602,
+      "norm_max": 0.00013956672046333551,
+      "norm_mean": 0.00013753566599916667,
+      "norm_median": 0.00013753831444773823,
+      "norm_p05": 0.00013747392004006542,
+      "norm_p95": 0.00013762302332906984,
+      "zero_norm_rows": 0,
+      "effective_rank": 1.0079692012816053,
+      "effective_rank_definition": "exp(Shannon entropy of normalized singular values); uncentered"
+    },
+    "gene_position_post_other_slots": {
+      "shape": [
+        5000,
+        32
+      ],
+      "norm_min": 0.00012836263340432197,
+      "norm_max": 0.00013956672046333551,
+      "norm_mean": 0.00013754511019214988,
+      "norm_median": 0.0001375385618302971,
+      "norm_p05": 0.00013749961799476297,
+      "norm_p95": 0.00013762770322500728,
+      "zero_norm_rows": 0,
+      "effective_rank": 1.0107793520269661,
+      "effective_rank_definition": "exp(Shannon entropy of normalized singular values); uncentered"
+    },
+    "gene_combined_slot0": {
+      "shape": [
+        5000,
+        32
+      ],
+      "norm_min": 0.00012797220551874489,
+      "norm_max": 0.6179571747779846,
+      "norm_mean": 0.03803487494587898,
+      "norm_median": 0.027617886662483215,
+      "norm_p05": 0.020498022437095642,
+      "norm_p95": 0.15862095728516584,
+      "zero_norm_rows": 0,
+      "effective_rank": 1.0,
+      "effective_rank_definition": "exp(Shannon entropy of normalized singular values); uncentered"
+    },
+    "gene_combined_other_slots": {
+      "shape": [
+        5000,
+        32
+      ],
+      "norm_min": 0.00012797220551874489,
+      "norm_max": 0.6179541349411011,
+      "norm_mean": 0.038034871220588684,
+      "norm_median": 0.027617886662483215,
+      "norm_p05": 0.020498022437095642,
+      "norm_p95": 0.15862095728516584,
+      "zero_norm_rows": 0,
+      "effective_rank": 1.0,
+      "effective_rank_definition": "exp(Shannon entropy of normalized singular values); uncentered"
+    },
+    "target_pre_go": {
+      "shape": [
+        9853,
+        32
+      ],
+      "norm_min": 0.0,
+      "norm_max": 0.13880528509616852,
+      "norm_mean": 0.012845967896282673,
+      "norm_median": 0.005318679381161928,
+      "norm_p05": 0.0,
+      "norm_p95": 0.0483252555131912,
+      "zero_norm_rows": 4451,
+      "effective_rank": 5.718440074424324,
+      "effective_rank_definition": "exp(Shannon entropy of normalized singular values); uncentered"
+    },
+    "target_post_go": {
+      "shape": [
+        9853,
+        32
+      ],
+      "norm_min": 0.00020523618150036782,
+      "norm_max": 0.01666399836540222,
+      "norm_mean": 0.002054383512586355,
+      "norm_median": 0.0012552544940263033,
+      "norm_p05": 0.00027629190008156,
+      "norm_p95": 0.006897536292672155,
+      "zero_norm_rows": 0,
+      "effective_rank": 1.7645052053592258,
+      "effective_rank_definition": "exp(Shannon entropy of normalized singular values); uncentered"
+    },
+    "target_fused": {
+      "shape": [
+        9853,
+        32
+      ],
+      "norm_min": 5.718305601476459e-06,
+      "norm_max": 0.08844706416130066,
+      "norm_mean": 0.01708327792584896,
+      "norm_median": 0.013845580630004406,
+      "norm_p05": 0.0024728882592171433,
+      "norm_p95": 0.04321599453687666,
+      "zero_norm_rows": 0,
+      "effective_rank": 1.0000000000007438,
+      "effective_rank_definition": "exp(Shannon entropy of normalized singular values); uncentered"
+    }
+  },
+  "target_vocabulary_size": 9853,
+  "response_genes": 5000,
+  "unseen_test_targets": 384,
+  "unseen_test_targets_with_nonself_go_incoming_edges": 384,
+  "unsupported_dataset_conditions": [
+    "AC118549.1+ctrl",
+    "ALG1L+ctrl",
+    "C14orf178+ctrl",
+    "C7orf26+ctrl",
+    "FAM102B+ctrl",
+    "FAU+ctrl",
+    "GNB1L+ctrl",
+    "RPS10-NUDT3+ctrl",
+    "SEM1+ctrl"
+  ],
+  "definitions": {
+    "gene_lookup": "Learned gene_emb lookup; this tensor is not directly propagated by the coexpression GNN.",
+    "gene_position_pre": "Separate learned emb_pos lookup before coexpression propagation.",
+    "gene_position_post_slot0": "layers_emb_pos(emb_pos), graph-connected first batch slot.",
+    "gene_position_post_other_slots": "Exact upstream propagation for subsequent batch slots.",
+    "gene_combined": "emb_trans_v2(ReLU(bn_emb(gene_lookup)) + 0.2*gene_position_post).",
+    "target_pre_go": "pert_emb lookup.",
+    "target_post_go": "sim_layers output after GO propagation.",
+    "target_fused": "pert_fuse(target_post_go), for a single-target perturbation."
+  },
+  "caveats": [
+    "Forward preserves upstream single-copy coexpression edge indexing for repeated batch embeddings; exported slot semantics are explicit.",
+    "Graph-only is absence of direct target examples, not proof of absent indirect training gradients.",
+    "Nonzero predicted effects do not establish biological accuracy; evaluate against sealed measured references."
+  ]
+}

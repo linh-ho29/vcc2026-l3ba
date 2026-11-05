@@ -41,11 +41,16 @@ perturbation-vocabulary genes; sha256 verified against her
 trained_handoff_manifest.json before use. IMPORTANT CAVEAT (from her own
 reports/embedding_diagnostics.csv, carried through standardize_dim as a
 dimension change only - it does not fix this): target_fused has effective
-rank ~1.0 out of its nominal 32 dimensions at both epoch 3 and epoch 8 -
-i.e. it is close to a single scalar repeated across 32 coordinates, not 32
-independent features. Treat RPE1's slot in the merged table as real
-coverage but very low information content, not on par with the other 3
-lines' embeddings.
+rank ~1.0 out of its nominal 32 dimensions at both epoch 3 (her
+validation-best) and epoch 8 (final) - i.e. it is close to a single scalar
+repeated across 32 coordinates, not 32 independent features. Treat RPE1's
+slot in the merged table as real coverage but very low information
+content, not on par with the other 3 lines' embeddings. Both checkpoints'
+embeddings are available (--rpe1-epoch 8, the default, or 3); they are
+correlated (flattened Pearson r=0.92) but not identical (per-gene cosine
+similarity is bimodal - median 1.0, mean 0.72, with some genes at -1.0 -
+consistent with a near-rank-1 representation where sign/scale along the
+single dominant direction can flip between checkpoints).
 """
 from __future__ import annotations
 
@@ -265,7 +270,7 @@ def save_hdf5(
 
 
 # ---------------------------------------------------------------------------
-# Main: real extraction run for K562, HepG2, Jurkat; RPE1 fully imputed
+# Main: real extraction run for K562, HepG2, Jurkat, RPE1
 # ---------------------------------------------------------------------------
 
 GEARS_TRACK_ROOT = Path(__file__).resolve().parents[2]  # gears_track/ (this script lives in shared/scripts/)
@@ -273,9 +278,17 @@ GEARS_TRACK_ROOT = Path(__file__).resolve().parents[2]  # gears_track/ (this scr
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--out", type=Path, default=GEARS_TRACK_ROOT / "merged" / "gears_embeddings_merged.h5")
+    parser.add_argument("--out", type=Path, default=None, help="Defaults to merged/gears_embeddings_merged.h5, "
+                         "or merged/gears_embeddings_merged_rpe1_epoch3.h5 if --rpe1-epoch 3.")
     parser.add_argument("--dtype", choices=["float16", "float32"], default="float32")
+    parser.add_argument("--rpe1-epoch", type=int, choices=[8, 3], default=8,
+                         help="Which of Courtney's two verified RPE1 checkpoints to use: 8 (final, "
+                         "default, matches the other lines' convention) or 3 (her validation-best, "
+                         "for comparison - see gears_track/README.md for how the two differ).")
     args = parser.parse_args()
+    if args.out is None:
+        suffix = "" if args.rpe1_epoch == 8 else "_rpe1_epoch3"
+        args.out = GEARS_TRACK_ROOT / "merged" / f"gears_embeddings_merged{suffix}.h5"
 
     per_line: Dict[str, Dict[str, np.ndarray]] = {}
 
@@ -303,10 +316,11 @@ def main():
     )
     per_line["Jurkat"] = {g: standardize_dim(v[None, :], D_PERT)[0] for g, v in jurkat_raw.items()}
 
-    print("RPE1: loading representations.npz[target_fused] (32-d, real coverage over all "
-          "9,853 perturbation-vocabulary genes, but effective rank ~1.0 - see module "
-          "docstring); projecting 32-d -> 64-d", flush=True)
-    rpe1_dir = GEARS_TRACK_ROOT / "per_celltype" / "rpe1" / "embeddings"
+    rpe1_subdir = "embeddings" if args.rpe1_epoch == 8 else "embeddings_best_epoch_03"
+    print(f"RPE1 (epoch {args.rpe1_epoch}): loading {rpe1_subdir}/representations.npz[target_fused] "
+          "(32-d, real coverage over all 9,853 perturbation-vocabulary genes, but effective "
+          "rank ~1.0 at both epochs - see module docstring); projecting 32-d -> 64-d", flush=True)
+    rpe1_dir = GEARS_TRACK_ROOT / "per_celltype" / "rpe1" / rpe1_subdir
     rpe1_raw = from_representations_npz(
         rpe1_dir / "representations.npz", rpe1_dir / "target_index.csv",
         array_key="target_fused", gene_col="gene_symbol",

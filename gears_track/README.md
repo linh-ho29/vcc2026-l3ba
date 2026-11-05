@@ -18,7 +18,8 @@ gears_track/
 │   ├── jurkat/       # complete - see per_celltype/jurkat/README.md
 │   └── rpe1/         # complete, but degenerate - see the rpe1 section below
 ├── merged/
-│   └── gears_embeddings_merged.h5   # output of shared/scripts/extract_gears_embeddings.py
+│   ├── gears_embeddings_merged.h5              # RPE1 epoch 8 (default/final) - see below
+│   └── gears_embeddings_merged_rpe1_epoch3.h5  # same, but RPE1 epoch 3 (validation-best)
 └── shared/
     ├── gears_patched_source/   # vendored, patched upstream `gears` library (v0.0.2) - used by any cell type
     └── scripts/                 # data-prep, graph-cache builders, training/inference, metrics/reporting
@@ -94,33 +95,49 @@ matching the hepg2/k562 convention) - available locally in
 ## rpe1 (`per_celltype/rpe1/`)
 
 From Courtney's full 8-epoch handoff (`courtneychen` branch,
-`gears_adapter_ready/`). The actual embeddings export
-(`embeddings/representations.npz` + `target_index.csv`) isn't in that git
-tree - it ships as a separate ~543 MB GitHub Release
-(`gears-rpe1-8epoch-v1`) because of size. Only `representations.npz` and
-`target_index.csv` are copied here (3.1 MB); sha256 verified against her
+`gears_adapter_ready/`). The actual embeddings exports aren't in that git
+tree - they ship as a separate ~543 MB GitHub Release
+(`gears-rpe1-8epoch-v1`) because of size, as two checkpoints:
+
+```
+per_celltype/rpe1/
+├── embeddings/                  # epoch 8 (final) - used by default
+└── embeddings_best_epoch_03/    # epoch 3 (her validation-best)
+```
+
+Only `representations.npz` + `target_index.csv` are copied from each (3.1
+MB / 4.4 MB); all 4 files per checkpoint sha256-verified against her
 `trained_handoff_manifest.json` before use, consistent with her own
 handoff's security guidance (precomputed arrays only, no `torch.load` on the
-raw `.pt` checkpoints).
+raw `.pt` checkpoints, which also live in `checkpoints/` on the release but
+are not copied here).
 
 `representations.npz["target_fused"]` ([9853, 32]) is the real post-GNN
 fused perturbation embedding - the same quantity extracted for the other 3
-lines - and covers the full 9,853-perturbation vocabulary, not a subset.
-**But** per her own `reports/embedding_diagnostics.csv`, `target_fused` has
-**effective rank ≈1.0 out of its nominal 32 dimensions**, at both the
-validation-best (epoch 3) and final (epoch 8) checkpoints - i.e. it is
-close to a single repeated scalar, not 32 independent features. The merge
-script's `standardize_dim` projection to 64-d does not fix this: it's a
-dimension change, not a rank increase. Treat RPE1's slot in the merged
-table as real coverage with very low information content, not on par with
-the other 3 lines.
+lines - and covers the full 9,853-perturbation vocabulary, not a subset, at
+both checkpoints. **But** per her own `reports/embedding_diagnostics.csv`,
+`target_fused` has **effective rank ≈1.0 out of its nominal 32 dimensions**
+at both epoch 3 and epoch 8 - i.e. it is close to a single repeated scalar,
+not 32 independent features. The merge script's `standardize_dim`
+projection to 64-d does not fix this: it's a dimension change, not a rank
+increase. Treat RPE1's slot in the merged table as real coverage with very
+low information content, not on par with the other 3 lines.
 
-## `merged/gears_embeddings_merged.h5`
+Comparing the two checkpoints directly (all 9,853 genes, both real):
+flattened Pearson correlation is 0.92, but per-gene cosine similarity is
+bimodal - median 1.0, mean 0.72, with a tail of genes at -1.0. That pattern
+is consistent with a near-rank-1 representation: most of each embedding's
+variation sits along one dominant direction, and that direction's sign can
+flip between checkpoints for some genes. Net: epoch 3 and epoch 8 agree on
+*that* dominant direction almost everywhere, but aren't interchangeable at
+the per-gene level.
+
+## `merged/gears_embeddings_merged*.h5`
 
 Output of `shared/scripts/extract_gears_embeddings.py`: standardizes each
 cell type's post-GNN perturbation embedding to a fixed `d_pert=64` (identity
 for k562, already 64-d; a fixed/seeded - not learned - Gaussian random
-projection for hepg2 and jurkat, both 32-d) and merges into one
+projection for hepg2, jurkat, and rpe1, all 32-d) and merges into one
 `[n_genes, 4, 64]` tensor in the fixed order `[K562, HepG2, RPE1, Jurkat]`,
 with a `[n_genes, 4]` binary mask (1 = real, 0 = imputed). Missing
 cell-line/gene combinations are imputed with the cross-line mean of
@@ -132,3 +149,8 @@ perturbation-vocabulary genes, though see the rank caveat above). "post-GNN"
 is defined precisely in the script's own docstring, not assumed - it's the
 output of GEARS's `pert_fuse(sim_layers(pert_emb(...)))`, matching what
 each handoff already saved as `*_fused`/`post_graph`/`target_fused` arrays.
+
+`--rpe1-epoch {8,3}` (default 8) picks which of Courtney's two verified RPE1
+checkpoints feeds the merge; `gears_embeddings_merged.h5` (epoch 8) and
+`gears_embeddings_merged_rpe1_epoch3.h5` (epoch 3) are both committed so
+either can be used without re-running the script.
