@@ -78,6 +78,10 @@ OPTIONAL_BATCH_KEYS: Tuple[str, ...] = (
     "phase_labels",          # [K] phase names, e.g. ["G1", "S", "G2M", "M"]
     "compsim_weights",       # [B, K] composition similarity to reference lines
     "ground_truth_alpha",    # synthetic-only diagnostic (ignored by forward)
+    # --- gated multi-context fusion extension (opt-in via config) ---
+    "gears_embeddings_multi",  # [B, num_gears_sources, gears_dim] per-cell-type GEARS embeddings
+    "gears_source_mask",       # [B, num_gears_sources] bool/0-1, which sources are real (not missing)
+    "context_embedding",       # [B, context_dim] target-context embedding "c"
 )
 
 REQUIRED_SUBPOPULATION_KEYS: Tuple[str, ...] = (
@@ -164,6 +168,25 @@ class AdapterConfig:
     # M4: gate the invariant component by composition similarity.
     composition_weighting: bool = False
 
+    # --- Gated multi-context fusion extension (system architecture Phase 2) ---
+    # When enabled, Module A additionally accepts K per-cell-type GEARS
+    # embeddings (one per pretrained GEARS checkpoint, e.g. k562/hepg2) and
+    # fuses them via context-conditioned gating instead of using a single
+    # gears_embeddings vector. See hybrid_adapter.gated_fusion.
+    #
+    # gears_source_dims is a tuple of per-source embedding widths, in a fixed
+    # order the caller must use consistently (e.g. (64, 32) for (k562, hepg2) -
+    # the two real per-cell-type GEARS checkpoints in this project do NOT
+    # share an embedding width, confirmed directly; treated as the general
+    # case, not an edge case). num_gears_sources is derived from it.
+    use_gated_fusion: bool = False
+    gears_source_dims: Tuple[int, ...] = (32, 32)
+    context_dim: int = 32
+
+    @property
+    def num_gears_sources(self) -> int:
+        return len(self.gears_source_dims)
+
     feature_spec: FeatureSpec = field(default_factory=FeatureSpec)
 
     # Inference behaviour
@@ -196,6 +219,14 @@ class AdapterConfig:
             raise ValueError("gene_chunk_size must be >= 1")
         if not (0.0 <= self.dropout < 1.0):
             raise ValueError("dropout must be in [0, 1)")
+        if self.use_gated_fusion:
+            if self.num_gears_sources < 2:
+                raise ValueError(
+                    "num_gears_sources must be >= 2 when use_gated_fusion is enabled "
+                    "(fusing a single source is just the existing gears_only path)."
+                )
+            if self.context_dim < 1:
+                raise ValueError("context_dim must be >= 1")
 
 
 def _as_tensor(value: Any, name: str) -> torch.Tensor:
@@ -338,6 +369,48 @@ def validate_batch(
         _check_shape(gears_embeddings, "gears_embeddings", (B, config.gears_dim))
         _check_finite(gears_embeddings, "gears_embeddings")
 
+    # --- Gated multi-context fusion inputs --------------------------------
+    # A LIST of K tensors, not one stacked tensor: per-cell-type GEARS
+    # checkpoints need not share an embedding width (k562 is 64-d, hepg2 is
+    # 32-d in this project - confirmed, not an edge case), so stacking into
+    # a single [B, K, D] tensor is not generally possible.
+    gears_embeddings_multi: Optional[List[torch.Tensor]] = None
+    gears_source_mask: Optional[torch.Tensor] = None
+    context_embedding: Optional[torch.Tensor] = None
+    if config.use_gated_fusion:
+        if batch.get("gears_embeddings_multi") is None or batch.get("context_embedding") is None:
+            raise BatchValidationError(
+                "use_gated_fusion=True requires both 'gears_embeddings_multi' and "
+                "'context_embedding' in the batch."
+            )
+    if batch.get("gears_embeddings_multi") is not None:
+        raw_multi = batch["gears_embeddings_multi"]
+        if not isinstance(raw_multi, (list, tuple)):
+            raise BatchValidationError(
+                "gears_embeddings_multi must be a list/tuple of K per-source tensors "
+                f"(one per cell type), got {type(raw_multi)}."
+            )
+        if len(raw_multi) != config.num_gears_sources:
+            raise BatchValidationError(
+                f"gears_embeddings_multi has {len(raw_multi)} sources, expected "
+                f"{config.num_gears_sources} (config.gears_source_dims)."
+            )
+        gears_embeddings_multi = []
+        for k, (tensor, expected_dim) in enumerate(zip(raw_multi, config.gears_source_dims)):
+            t = _as_tensor(tensor, f"gears_embeddings_multi[{k}]")
+            _check_shape(t, f"gears_embeddings_multi[{k}]", (B, expected_dim))
+            _check_finite(t, f"gears_embeddings_multi[{k}]")
+            gears_embeddings_multi.append(t)
+        if batch.get("gears_source_mask") is not None:
+            gears_source_mask = _as_tensor(batch["gears_source_mask"], "gears_source_mask")
+            _check_shape(gears_source_mask, "gears_source_mask", (B, config.num_gears_sources))
+            if ((gears_source_mask != 0) & (gears_source_mask != 1)).any():
+                raise BatchValidationError("gears_source_mask must be binary (0/1).")
+    if batch.get("context_embedding") is not None:
+        context_embedding = _as_tensor(batch["context_embedding"], "context_embedding")
+        _check_shape(context_embedding, "context_embedding", (B, config.context_dim))
+        _check_finite(context_embedding, "context_embedding")
+
     stat_coverage: Optional[torch.Tensor] = None
     if batch.get("stat_coverage") is not None:
         stat_coverage = _as_tensor(batch["stat_coverage"], "stat_coverage")
@@ -456,6 +529,9 @@ def validate_batch(
         "phase_stat_effects": phase_stat_effects,
         "phase_labels": phase_labels,
         "compsim_weights": compsim_weights,
+        "gears_embeddings_multi": gears_embeddings_multi,
+        "gears_source_mask": gears_source_mask,
+        "context_embedding": context_embedding,
     }
 
 

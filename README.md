@@ -32,6 +32,51 @@ Module D is one shared network for every responding gene (no per-gene heads);
 the gene dimension is processed in configurable chunks (default 4096) so an
 18,533-gene response axis stays memory-predictable on CPU.
 
+## Project hypothesis
+
+> Our virtual cell rests on the hypothesis that CRISPR perturbation responses
+> occupy a low-dimensional transcriptional manifold whose dynamics follow a
+> context-conditioned velocity field. We hypothesize that lineage-specific
+> cellular responses can be decomposed into shared and cell-specific
+> subnetwork components, enabling zero-shot or cross-context prediction by
+> dynamically gating perturbation-induced graph representations learned from
+> distinct cellular contexts.
+
+The H7 subpopulation modes below and the gated multi-context fusion module
+are both expressions of this hypothesis at different granularities:
+subpopulation (cell-cycle phase) and cell line, respectively.
+
+## Gated multi-context fusion (`hybrid_adapter.gated_fusion`)
+
+Aligns Module A with the system architecture posted on `main`'s README
+(gated latent multi-context fusion, Phase 2): instead of one GEARS
+embedding, Module A can aggregate K independently pretrained per-cell-type
+GEARS checkpoints (currently k562 and hepg2, on the `GEARS` branch's
+`gears_track/per_celltype/`) via context-conditioned gating:
+
+```
+alpha_k = Softmax( W_gate . [ e_p^(k) || c ] )
+e_p^(fused) = sum_k alpha_k . Linear(e_p^(k))
+```
+
+Enable with `AdapterConfig(use_gated_fusion=True, gears_source_dims=(64, 32), context_dim=...)`
+and supply `gears_embeddings_multi` (a **list** of K per-source tensors, not
+one stacked tensor - k562 and hepg2's real GEARS checkpoints do not share an
+embedding width, confirmed directly, so each source gets its own input
+projection before the shared gate), `gears_source_mask` (which sources are
+real for each row - a missing source is excluded from the softmax, never
+zero-filled), and `context_embedding`.
+
+This is an incremental integration into the existing Module A only - the
+fused vector is pinned to `gears_dim` so it slots in without touching
+Modules B-D. The architecture's other new pieces (sampling `z_0` from a
+frozen control-cell VAE/PCA, the discrete latent flow block, the decoder,
+and the Sliced Wasserstein distribution-matching loss) are not implemented
+here yet; `corrected = stat + residual` remains the only prediction pathway
+in this package today. See `examples/real_data_fusion_smoketest.py` for a
+forward-pass-only (no training, no gradients) compatibility check against
+the real k562/hepg2 embeddings.
+
 ## Installation
 
 ```bash

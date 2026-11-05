@@ -30,6 +30,17 @@ model:
   # M4: gate the invariant component by composition similarity (CompSim).
   composition_weighting: false
 
+  # --- Gated multi-context fusion extension (system architecture Phase 2) ---
+  # When enabled, Module A fuses K per-cell-type GEARS embeddings (one per
+  # pretrained GEARS checkpoint) via context-conditioned gating instead of a
+  # single gears_embeddings vector. gears_source_dims is per-source
+  # embedding width, in a fixed order the caller must use consistently - the
+  # two real per-cell-type checkpoints in this project do NOT share a width
+  # (k562=64, hepg2=32), so this is not assumed uniform.
+  use_gated_fusion: false
+  gears_source_dims: [64, 32]  # e.g. [k562, hepg2]
+  context_dim: 32
+
   # Inference
   gene_chunk_size: 4096
 

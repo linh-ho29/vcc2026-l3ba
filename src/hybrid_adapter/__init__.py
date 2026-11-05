@@ -16,6 +16,7 @@ from .schemas import (
     validate_batch,
 )
 from .model import MODEL_VERSION, HybridAdapter
+from .gated_fusion import GatedMultiContextFusion
 from .losses import (
     compute_loss,
     de_weighted_reconstruction_loss,
@@ -52,6 +53,7 @@ __all__ = [
     "SUPPORTED_EFFECT_UNITS",
     "SUPPORTED_EXPRESSION_UNITS",
     "HybridAdapter",
+    "GatedMultiContextFusion",
     "describe_schema",
     "validate_batch",
     "compute_loss",

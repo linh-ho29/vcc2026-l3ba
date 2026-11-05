@@ -43,6 +43,7 @@ from typing import Any, Dict, List, Mapping, Optional
 import torch
 from torch import Tensor, nn
 
+from .gated_fusion import GatedMultiContextFusion
 from .schemas import (
     AdapterConfig,
     BatchValidationError,
@@ -50,7 +51,7 @@ from .schemas import (
     validate_batch,
 )
 
-MODEL_VERSION = "1.1.0"
+MODEL_VERSION = "1.2.0"
 
 
 class PerturbationEncoder(nn.Module):
@@ -77,7 +78,12 @@ class PerturbationEncoder(nn.Module):
         """Return ``z_pert`` of shape ``[B, latent_dim]``.
 
         Missing sources are zero-filled according to the availability masks and
-        the configured ``perturbation_mode``.
+        the configured ``perturbation_mode``. ``gears_embeddings`` here may be
+        either the single-source embedding from the batch, or - when
+        ``config.use_gated_fusion`` is enabled - the already-fused
+        ``e_p^(fused)`` computed by :class:`HybridAdapter` from multiple
+        per-cell-type GEARS sources; this method treats both identically,
+        since fusion only changes where the vector came from, not its shape.
         """
         mode = self.config.perturbation_mode
         use_scgpt = masks["scgpt_target"] and mode in ("both", "scgpt_only", "auto")
@@ -200,6 +206,21 @@ class HybridAdapter(nn.Module):
         self.response_gene_norm = nn.LayerNorm(self.config.latent_dim)
         self.residual_mlp = ResidualMLP(self.config)
 
+        # --- Gated multi-context fusion (system architecture Phase 2 step 2) ---
+        # fused_dim is pinned to gears_dim (not a separate config value) so the
+        # fused vector slots directly into PerturbationEncoder's existing
+        # gears_embeddings input without changing any other module's shape.
+        # The architecture diagram's own e_p^(fused) in R^64 describes the full
+        # Phase 2 pipeline (distribution sampling + discrete latent flow +
+        # decoder), which does not exist in this codebase yet; this is the
+        # incremental integration into the existing Module A only.
+        if self.config.use_gated_fusion:
+            self.gated_fusion = GatedMultiContextFusion(
+                source_dims=self.config.gears_source_dims,
+                context_dim=self.config.context_dim,
+                fused_dim=self.config.gears_dim,
+            )
+
         # --- H7 subpopulation components (created only when enabled) ---
         if self.config.response_mode == "subpopulation":
             K = self.config.n_phases
@@ -296,9 +317,21 @@ class HybridAdapter(nn.Module):
         device = stat.device
 
         # Modules A-C: context-conditioned representation h [B, fusion_dim]
+        gears_input = validated["gears_embeddings"]
+        gate_alpha = None
+        if self.config.use_gated_fusion:
+            fused, gate_alpha = self.gated_fusion(
+                validated["gears_embeddings_multi"],
+                validated["context_embedding"],
+                validated["gears_source_mask"],
+            )
+            gears_input = fused
+            masks = dict(masks)
+            masks["gears_embeddings"] = True  # fusion already enforces >=1 real source
+
         z_pert = self.perturbation_encoder(
             validated["scgpt_target_embeddings"],
-            validated["gears_embeddings"],
+            gears_input,
             masks,
         )
         z_ctrl = self.control_encoder(validated["control_features"])
@@ -349,6 +382,8 @@ class HybridAdapter(nn.Module):
         if self.config.response_mode == "subpopulation":
             output["phase_corrected_effects"] = self._last_phase_corrected
             output["alpha_effective"] = self._last_alpha_eff
+        if self.config.use_gated_fusion:
+            output["gated_fusion_alpha"] = gate_alpha
         check_output_finite(output)
         return output
 
