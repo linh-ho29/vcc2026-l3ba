@@ -47,7 +47,7 @@ import numpy as np
 import torch
 from torch import Tensor, nn
 
-from .schemas import BatchValidationError
+from ..schemas import BatchValidationError
 
 
 class ScGPTGeneEmbeddingPooling(nn.Module):

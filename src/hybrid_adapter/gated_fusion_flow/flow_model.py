@@ -26,7 +26,7 @@ from torch import Tensor, nn
 from .control_branch import ControlCellEncoder, NTCLatentBank, ScGPTGeneEmbeddingPooling
 from .gated_fusion import GatedMultiContextFusion
 from .latent_flow import DiscreteLatentFlow, InputConditioningLayer, LatentDecoder
-from .schemas import BatchValidationError
+from ..schemas import BatchValidationError
 
 
 class GatedFusionFlowAdapter(nn.Module):

@@ -45,7 +45,7 @@ from typing import List, Optional, Sequence, Tuple
 import torch
 from torch import Tensor, nn
 
-from .schemas import BatchValidationError
+from ..schemas import BatchValidationError
 
 
 class GatedMultiContextFusion(nn.Module):

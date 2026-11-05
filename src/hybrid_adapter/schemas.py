@@ -172,7 +172,7 @@ class AdapterConfig:
     # When enabled, Module A additionally accepts K per-cell-type GEARS
     # embeddings (one per pretrained GEARS checkpoint, e.g. k562/hepg2) and
     # fuses them via context-conditioned gating instead of using a single
-    # gears_embeddings vector. See hybrid_adapter.gated_fusion.
+    # gears_embeddings vector. See hybrid_adapter.gated_fusion_flow.gated_fusion.
     #
     # gears_source_dims is a tuple of per-source embedding widths, in a fixed
     # order the caller must use consistently (e.g. (64, 32) for (k562, hepg2) -

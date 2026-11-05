@@ -46,7 +46,7 @@ The H7 subpopulation modes below and the gated multi-context fusion module
 are both expressions of this hypothesis at different granularities:
 subpopulation (cell-cycle phase) and cell line, respectively.
 
-## Gated multi-context fusion (`hybrid_adapter.gated_fusion`)
+## Gated multi-context fusion (`hybrid_adapter.gated_fusion_flow.gated_fusion`)
 
 Aligns Module A with the system architecture posted on `main`'s README
 (gated latent multi-context fusion, Phase 2): instead of one GEARS
@@ -72,7 +72,7 @@ fused vector is pinned to `gears_dim` so it slots in without touching
 Modules B-D. `corrected = stat + residual` remains `HybridAdapter`'s only
 prediction pathway, untouched by any of the below.
 
-## Full Phase 2 pipeline (`hybrid_adapter.flow_model.GatedFusionFlowAdapter`)
+## Full Phase 2 pipeline (`hybrid_adapter.gated_fusion_flow.flow_model.GatedFusionFlowAdapter`)
 
 A second, separate model implementing the rest of the architecture -
 control-cell distribution sampling, the discrete latent flow block, the
@@ -85,7 +85,7 @@ z_0 ~ P_ctrl  (real control-cell latent, sampled empirically)
   -> z_pert  ->  light decoder  ->  predicted expression
 ```
 
-- **Control branch** (`hybrid_adapter.control_branch`): `ScGPTGeneEmbeddingPooling`
+- **Control branch** (`hybrid_adapter.gated_fusion_flow.control_branch`): `ScGPTGeneEmbeddingPooling`
   is a frozen, expression-weighted pooling of per-gene scGPT embeddings into
   one per-cell vector - per the user's explicit direction, the **fine-tuned**
   scGPT gene embeddings are used here, frozen, as an offline feature
@@ -102,7 +102,7 @@ z_0 ~ P_ctrl  (real control-cell latent, sampled empirically)
   stored per-cell latents empirically - never a mean or parametric
   distribution, per the architecture's explicit "sample actual single-cell
   baseline vectors" requirement.
-- **Latent flow** (`hybrid_adapter.latent_flow`): `InputConditioningLayer`
+- **Latent flow** (`hybrid_adapter.gated_fusion_flow.latent_flow`): `InputConditioningLayer`
   projects `[z0 || e_p^(fused) || c]` into the flow's working space;
   `DiscreteLatentFlow` runs 2-3 explicit-Euler residual steps, each
   conditioned on `e_p^(fused)`, `c`, and a step embedding

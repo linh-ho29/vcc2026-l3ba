@@ -39,7 +39,7 @@ import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from hybrid_adapter.gated_fusion import GatedMultiContextFusion
+from hybrid_adapter.gated_fusion_flow.gated_fusion import GatedMultiContextFusion
 
 K562_SOURCE_DIM = 64
 HEPG2_SOURCE_DIM = 32

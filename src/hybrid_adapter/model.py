@@ -43,7 +43,7 @@ from typing import Any, Dict, List, Mapping, Optional
 import torch
 from torch import Tensor, nn
 
-from .gated_fusion import GatedMultiContextFusion
+from .gated_fusion_flow.gated_fusion import GatedMultiContextFusion
 from .schemas import (
     AdapterConfig,
     BatchValidationError,

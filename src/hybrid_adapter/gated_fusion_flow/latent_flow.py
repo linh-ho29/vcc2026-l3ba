@@ -34,7 +34,7 @@ from typing import Optional
 import torch
 from torch import Tensor, nn
 
-from .schemas import BatchValidationError
+from ..schemas import BatchValidationError
 
 
 class InputConditioningLayer(nn.Module):

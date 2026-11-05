@@ -11,7 +11,7 @@ import torch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from hybrid_adapter import AdapterConfig, HybridAdapter, BatchValidationError
-from hybrid_adapter.gated_fusion import GatedMultiContextFusion
+from hybrid_adapter.gated_fusion_flow.gated_fusion import GatedMultiContextFusion
 from hybrid_adapter.synthetic import SyntheticConfig, generate_whole_line_batch
 
 B, CONTEXT_DIM, FUSED_DIM = 5, 16, 32
