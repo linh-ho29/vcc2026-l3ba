@@ -1,0 +1,30 @@
+{
+  "source": "scgpt_FINAL handoff (2026-11-05), checksums verified against its own MANIFEST.md5 before use - all 9 provided files matched, no corruption this time",
+  "note": "ft_scgpt_final.pt (207MB) and gene_emb_finetuned_full.npy (124MB) were NOT copied here - both exceed GitHub's 100MB limit, and neither is needed for the frozen, PIE-axis offline feature extractor role (gene_emb_finetuned_pie.npy is the already-mapped, already-small artifact that role actually needs).",
+  "files": {
+    "data/scgpt/gene_emb_finetuned_pie.npy": {
+      "sha256": "cc6807ad9fec445097834500cfdd95dcd3feb6466d4a83a228ccae33f4aeb604",
+      "bytes": 13602944
+    },
+    "data/scgpt/gene_emb_frozen_pie.npy": {
+      "sha256": "3cff4b229f7adaf835be015941ad508581c8bfd1f4fea101b633e0c67bbd3c03",
+      "bytes": 13602944
+    },
+    "data/scgpt/gene_emb_meta.json": {
+      "sha256": "acaaab7df5b910f169ee8ec956cfd8d4fe5e032e5a3171a04fcfa2c703570529",
+      "bytes": 773
+    },
+    "data/scgpt/ft_meta.json": {
+      "sha256": "bfd6cd42e9b95c061ccae627e6d648d2ac16d0d5c1b661cf6ce154b66058735a",
+      "bytes": 368
+    },
+    "data/scgpt/hepg2_real_control_cells_pie_axis.npy": {
+      "sha256": "470d335648bd4ba7c12ef1f1de107c98b891ca93456869873913197b8438ad75",
+      "bytes": 53136128
+    },
+    "data/scgpt/hepg2_pie_axis_present_mask.npy": {
+      "sha256": "3395df4c77f1460c5ace1c4a620a9566458558eda69c5aba3c2f4efefd936a19",
+      "bytes": 6770
+    }
+  }
+}

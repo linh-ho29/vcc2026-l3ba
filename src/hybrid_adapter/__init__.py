@@ -17,11 +17,16 @@ from .schemas import (
 )
 from .model import MODEL_VERSION, HybridAdapter
 from .gated_fusion import GatedMultiContextFusion
+from .control_branch import ControlCellEncoder, NTCLatentBank, ScGPTGeneEmbeddingPooling
+from .latent_flow import DiscreteLatentFlow, InputConditioningLayer, LatentDecoder
+from .flow_model import GatedFusionFlowAdapter
 from .losses import (
+    compute_flow_loss,
     compute_loss,
     de_weighted_reconstruction_loss,
     global_reconstruction_loss,
     perturbation_discrimination_loss,
+    sliced_wasserstein_distance,
 )
 from .train import TrainConfig, TrainHistory, set_seed, train_adapter
 from .inference import predict_corrected_effects
@@ -54,9 +59,18 @@ __all__ = [
     "SUPPORTED_EXPRESSION_UNITS",
     "HybridAdapter",
     "GatedMultiContextFusion",
+    "ControlCellEncoder",
+    "NTCLatentBank",
+    "ScGPTGeneEmbeddingPooling",
+    "DiscreteLatentFlow",
+    "InputConditioningLayer",
+    "LatentDecoder",
+    "GatedFusionFlowAdapter",
     "describe_schema",
     "validate_batch",
     "compute_loss",
+    "compute_flow_loss",
+    "sliced_wasserstein_distance",
     "global_reconstruction_loss",
     "de_weighted_reconstruction_loss",
     "perturbation_discrimination_loss",

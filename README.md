@@ -69,13 +69,66 @@ zero-filled), and `context_embedding`.
 
 This is an incremental integration into the existing Module A only - the
 fused vector is pinned to `gears_dim` so it slots in without touching
-Modules B-D. The architecture's other new pieces (sampling `z_0` from a
-frozen control-cell VAE/PCA, the discrete latent flow block, the decoder,
-and the Sliced Wasserstein distribution-matching loss) are not implemented
-here yet; `corrected = stat + residual` remains the only prediction pathway
-in this package today. See `examples/real_data_fusion_smoketest.py` for a
-forward-pass-only (no training, no gradients) compatibility check against
-the real k562/hepg2 embeddings.
+Modules B-D. `corrected = stat + residual` remains `HybridAdapter`'s only
+prediction pathway, untouched by any of the below.
+
+## Full Phase 2 pipeline (`hybrid_adapter.flow_model.GatedFusionFlowAdapter`)
+
+A second, separate model implementing the rest of the architecture -
+control-cell distribution sampling, the discrete latent flow block, the
+decoder, and the Sliced Wasserstein distribution-matching loss - with no
+statistical-baseline dependency at all:
+
+```
+z_0 ~ P_ctrl  (real control-cell latent, sampled empirically)
+  -> gated fusion of {e_p^(k)}  ->  input conditioning  ->  discrete latent flow (2-3 steps)
+  -> z_pert  ->  light decoder  ->  predicted expression
+```
+
+- **Control branch** (`hybrid_adapter.control_branch`): `ScGPTGeneEmbeddingPooling`
+  is a frozen, expression-weighted pooling of per-gene scGPT embeddings into
+  one per-cell vector - per the user's explicit direction, the **fine-tuned**
+  scGPT gene embeddings are used here, frozen, as an offline feature
+  extractor. Read this project's own `s05c` evaluation before expecting much
+  from it: fine-tuning did not measurably beat frozen embeddings under a
+  diagonal-ridge probe (deltas -0.0001 to -0.0004 across folds), and `s04`
+  found embeddings (frozen or fine-tuned) match random Gaussian features
+  within ~0.01 Pearson - most of a linear probe's apparent value is generic
+  per-gene capacity, not unique semantic structure. Using the fine-tune here
+  is a consistency choice, not an accuracy claim. `ControlCellEncoder` is a
+  PCA fit once on real control-cell pooled features (closed-form, not
+  gradient descent - not "training" in the sense the package's synthetic-
+  phase rule guards against) then frozen. `NTCLatentBank` samples real,
+  stored per-cell latents empirically - never a mean or parametric
+  distribution, per the architecture's explicit "sample actual single-cell
+  baseline vectors" requirement.
+- **Latent flow** (`hybrid_adapter.latent_flow`): `InputConditioningLayer`
+  projects `[z0 || e_p^(fused) || c]` into the flow's working space;
+  `DiscreteLatentFlow` runs 2-3 explicit-Euler residual steps, each
+  conditioned on `e_p^(fused)`, `c`, and a step embedding
+  (Pre-LayerNorm -> Linear -> GELU -> Dropout); `LatentDecoder` is a light
+  linear (or 2-layer) head to gene-expression space. One dimensional
+  inconsistency in the posted diagram (z0/z_pert stated as R^128, the
+  conditioning layer/flow internals stated as 256-wide) is resolved with an
+  explicit final 256->128 projection rather than assumed away - documented
+  in the module docstring.
+- **Loss** (`hybrid_adapter.losses.sliced_wasserstein_distance`,
+  `compute_flow_loss`): closed-form 1-D optimal transport averaged over
+  random projections, comparing a batch of predicted vs. real single-cell
+  latents for one perturbation (not a per-row loss like the others);
+  combined with plain MSE reconstruction, SWD weight defaults to 0 (off)
+  until there's real paired single-cell data to validate it against.
+
+Verified against real data (forward pass only - no training, no gradients,
+eval mode throughout): `examples/real_data_pipeline_smoketest.py` runs the
+entire chain on 2,000 real HepG2 control cells (PCA explains 98.3% of
+variance with 128 components), the real fine-tuned scGPT embeddings, and
+real k562+hepg2 GEARS embeddings for 2,122 overlapping genes - finite
+output confirmed end to end, not just on synthetic fixtures of convenient
+matching shape. `examples/real_data_fusion_smoketest.py` covers the fusion
+module alone. The context embedding `c` has no real source yet in either
+script (zeros, clearly labeled) - Phase 1's control-cell-derived context
+encoder doesn't exist yet.
 
 ## Installation
 
